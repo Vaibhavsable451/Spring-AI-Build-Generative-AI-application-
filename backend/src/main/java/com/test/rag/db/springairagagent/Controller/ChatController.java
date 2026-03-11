@@ -1,4 +1,4 @@
-package com.test.rag.db.springairagagent.Controller;
+package com.test.rag.db.springairagagent.controller;
 
 
 import com.test.rag.db.springairagagent.service.ChatService;
@@ -15,7 +15,7 @@ public class ChatController {
           this.chatService = chatService;
       }
 
-      @CrossOrigin(origins = "http://localhost:3000")
+      @CrossOrigin(origins = "*")
       @GetMapping(value = "/user/chat", produces = "application/json")
       public String chat(@RequestParam String question){
           return chatService.getMyResponse(question);
