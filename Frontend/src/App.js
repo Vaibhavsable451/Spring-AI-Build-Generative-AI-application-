@@ -1,4 +1,4 @@
-﻿import React, {
+import React, {
     useState,
     useRef,
     useEffect
@@ -44,7 +44,7 @@ function App() {
     const hasAskedOnce = useRef(false);
 
     const scrollToBottom = () => {
-        chatEndRef.current ? .scrollIntoView({
+        chatEndRef.current?.scrollIntoView({
             behavior: "smooth"
         });
     };
@@ -62,7 +62,7 @@ function App() {
             setHistory((prev) => [{
                     id: Date.now(),
                     timestamp: new Date().toLocaleString(),
-                    title: messages.find((m) => m.from === userName) ? .text ? .slice(0, 40) ||
+                    title: messages.find((m) => m.from === userName)?.text?.slice(0, 40) ||
                         "New Chat",
                     messages: [...messages],
                 },
