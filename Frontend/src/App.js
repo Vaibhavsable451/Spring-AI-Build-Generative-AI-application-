@@ -44,7 +44,7 @@ function App() {
     const hasAskedOnce = useRef(false);
 
     const scrollToBottom = () => {
-        chatEndRef.current?.scrollIntoView({
+        chatEndRef.current ? .scrollIntoView({
             behavior: "smooth"
         });
     };
@@ -62,7 +62,7 @@ function App() {
             setHistory((prev) => [{
                     id: Date.now(),
                     timestamp: new Date().toLocaleString(),
-                    title: messages.find((m) => m.from === userName)?.text?.slice(0, 40) ||
+                    title: messages.find((m) => m.from === userName) ? .text ? .slice(0, 40) ||
                         "New Chat",
                     messages: [...messages],
                 },
@@ -96,7 +96,7 @@ function App() {
         setLoading(true);
 
         try {
-            const baseUrl = process.env.REACT_APP_API_URL || "http://localhost:8080";
+            const baseUrl = (process.env.REACT_APP_API_URL || "http://localhost:8080").replace(/\/$/, "");
             const response = await axios.get(`${baseUrl}/user/chat`, {
                 params: {
                     question
@@ -229,7 +229,8 @@ function App() {
                                 styles.historyItemMeta
                             } > {
                                 item.timestamp
-                            }â€¢ {
+                            }
+                            â€¢ {
                                 item.messages.length
                             }
                             messages <
