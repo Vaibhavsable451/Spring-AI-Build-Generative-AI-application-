@@ -96,8 +96,8 @@ function App() {
         setLoading(true);
 
         try {
-            const API_BASE_URL = process.env.REACT_APP_API_URL || "";
-            const response = await axios.get(`${API_BASE_URL}/user/chat`, {
+            const baseUrl = process.env.REACT_APP_API_URL || "http://localhost:8080";
+            const response = await axios.get(`${baseUrl}/user/chat`, {
                 params: {
                     question
                 },
@@ -109,8 +109,7 @@ function App() {
             const samReply = {
                 from: "Kairo",
                 text: typeof response.data === "string" ?
-                    response.data :
-                    JSON.stringify(response.data, null, 2),
+                    response.data : JSON.stringify(response.data, null, 2),
             };
 
             setMessages((prev) => [...prev, samReply]);
@@ -179,8 +178,10 @@ function App() {
                 /> <
                 h3 style = {
                     styles.historyTitle
-                } > Chat History < /h3> <
-                /div> <
+                } > Chat History < /h3> < /
+                div >
+
+                <
                 button onClick = {
                     () => setShowHistory(false)
                 }
@@ -191,8 +192,8 @@ function App() {
                 FiX size = {
                     18
                 }
-                /> <
-                /button> <
+                /> < /
+                button > <
                 /div>
 
                 <
@@ -232,8 +233,10 @@ function App() {
                                 item.messages.length
                             }
                             messages <
-                            /div> <
-                            /div> <
+                            /div> < /
+                            div >
+
+                            <
                             div style = {
                                 styles.historyItemActions
                             } >
@@ -256,15 +259,15 @@ function App() {
                             FiTrash2 size = {
                                 14
                             }
-                            /> <
-                            /button> <
-                            /div> <
-                            /div>
+                            /> < /
+                            button > <
+                            /div> < /
+                            div >
                         ))
                     )
                 } <
-                /div> <
-                /div> <
+                /div> < /
+                div > <
                 /div>
             )
         }
@@ -285,8 +288,10 @@ function App() {
         RiRobot3Fill style = {
             styles.logoIcon
         }
-        /> <
-        /div> <
+        /> < /
+        div >
+
+        <
         div style = {
             styles.headerText
         } >
@@ -298,8 +303,10 @@ function App() {
             styles.subtitle
         } >
         Smart assistant• Markdown + Code Support <
-        /p> <
-        /div> <
+        /p> < /
+        div >
+
+        <
         div style = {
             styles.headerActions
         } >
@@ -315,8 +322,10 @@ function App() {
         FiClock size = {
             18
         }
-        /> <
-        /button> <
+        /> < /
+        button >
+
+        <
         button onClick = {
             clearChat
         }
@@ -328,10 +337,10 @@ function App() {
         FiTrash2 size = {
             18
         }
-        /> <
-        /button> <
-        /div> <
-        /div>
+        /> < /
+        button > <
+        /div> < /
+        div >
 
         <
         div style = {
@@ -339,6 +348,7 @@ function App() {
         } > {
             messages.map((msg, idx) => {
                 const isUser = msg.from === userName;
+
                 return ( <
                     div key = {
                         idx
@@ -348,8 +358,7 @@ function App() {
                             ...styles.messageRow,
                             justifyContent: isUser ? "flex-end" : "flex-start",
                         }
-                    } >
-                    {
+                    } > {
                         !isUser && ( <
                             div style = {
                                 styles.botAvatar
@@ -359,7 +368,9 @@ function App() {
                             <
                             /div>
                         )
-                    } <
+                    }
+
+                    <
                     div style = {
                         {
                             ...styles.messageBubble,
@@ -373,7 +384,9 @@ function App() {
                         styles.messageSender
                     } > {
                         msg.from
-                    } < /div> {
+                    } < /div>
+
+                    {
                         isUser ? ( <
                             div style = {
                                 styles.messageText
@@ -386,7 +399,9 @@ function App() {
                             }
                             />
                         )
-                    } <
+                    }
+
+                    <
                     button onClick = {
                         () => deleteMessage(idx)
                     }
@@ -398,9 +413,11 @@ function App() {
                     FiTrash2 size = {
                         14
                     }
-                    /> <
-                    /button> <
-                    /div> {
+                    /> < /
+                    button > <
+                    /div>
+
+                    {
                         isUser && ( <
                             div style = {
                                 styles.userAvatar
@@ -444,15 +461,17 @@ function App() {
                 } > Kairo < /div> <
                 TypingDots / >
                 <
-                /div> <
-                /div>
+                /div> < /
+                div >
             )
-        } <
+        }
+
+        <
         div ref = {
             chatEndRef
         }
-        /> <
-        /div>
+        /> < /
+        div >
 
         <
         div style = {
@@ -481,10 +500,10 @@ function App() {
             sendMessage
         } >
         Send <
-        /button> <
-        /div> <
-        /div> <
-        /div>
+        /button> < /
+        div > <
+        /div> < /
+        div >
     );
 }
 
@@ -580,8 +599,8 @@ function MarkdownMessage({
                                 styles.table
                             } > {
                                 children
-                            } < /table> <
-                            /div>
+                            } < /table> < /
+                            div >
                         );
                     },
                     th({
@@ -639,12 +658,11 @@ function MarkdownMessage({
                         } < /h3>;
                     },
             }
-        } >
-        {
+        } > {
             content
         } <
-        /ReactMarkdown> <
-        /div>
+        /ReactMarkdown> < /
+        div >
     );
 }
 
@@ -673,7 +691,9 @@ function CodeBlock({
         } > {
             language && language !== "text" ? language : "code"
         } <
-        /span> <
+        /span>
+
+        <
         CopyToClipboard text = {
             code
         }
@@ -691,10 +711,12 @@ function CodeBlock({
         } <
         span > {
             copied ? "Copied" : "Copy"
-        } < /span> <
-        /button> <
-        /CopyToClipboard> <
-        /div> <
+        } < /span> < /
+        button > <
+        /CopyToClipboard> < /
+        div >
+
+        <
         SyntaxHighlighter language = {
             language
         }
@@ -706,12 +728,11 @@ function CodeBlock({
         }
         wrapLongLines = {
             true
-        } >
-        {
+        } > {
             code
         } <
-        /SyntaxHighlighter> <
-        /div>
+        /SyntaxHighlighter> < /
+        div >
     );
 }
 
@@ -729,8 +750,8 @@ function TypingDots() {
         } > < /span> <
         span style = {
             styles.dot
-        } > < /span> <
-        /div>
+        } > < /span> < /
+        div >
     );
 }
 
@@ -748,6 +769,7 @@ const styles = {
         left: 0,
         overflow: "hidden",
     },
+
     backgroundGlow1: {
         position: "absolute",
         width: "420px",
@@ -758,6 +780,7 @@ const styles = {
         left: "5%",
         filter: "blur(100px)",
     },
+
     backgroundGlow2: {
         position: "absolute",
         width: "380px",
@@ -768,6 +791,7 @@ const styles = {
         right: "8%",
         filter: "blur(100px)",
     },
+
     backgroundGlow3: {
         position: "absolute",
         width: "260px",
@@ -778,6 +802,7 @@ const styles = {
         left: "30%",
         filter: "blur(90px)",
     },
+
     container: {
         width: "96vw",
         height: "94vh",
@@ -794,6 +819,7 @@ const styles = {
         position: "relative",
         zIndex: 2,
     },
+
     header: {
         display: "flex",
         alignItems: "center",
@@ -803,6 +829,7 @@ const styles = {
         borderBottom: "1px solid rgba(255,255,255,0.10)",
         flexShrink: 0,
     },
+
     logoBox: {
         width: "64px",
         height: "64px",
@@ -814,19 +841,23 @@ const styles = {
         boxShadow: "0 10px 30px rgba(59,130,246,0.35)",
         flexShrink: 0,
     },
+
     logoIcon: {
         fontSize: "32px",
         color: "#fff",
     },
+
     headerText: {
         minWidth: 0,
     },
+
     headerActions: {
         marginLeft: "auto",
         display: "flex",
         alignItems: "center",
         gap: "10px",
     },
+
     headerIconBtn: {
         width: "42px",
         height: "42px",
@@ -839,6 +870,7 @@ const styles = {
         alignItems: "center",
         cursor: "pointer",
     },
+
     title: {
         margin: 0,
         color: "#ffffff",
@@ -846,11 +878,13 @@ const styles = {
         fontWeight: "800",
         letterSpacing: "0.3px",
     },
+
     subtitle: {
         margin: "4px 0 0 0",
         color: "rgba(255,255,255,0.72)",
         fontSize: "15px",
     },
+
     chatBox: {
         flex: 1,
         overflowY: "auto",
@@ -860,12 +894,14 @@ const styles = {
         border: "1px solid rgba(255,255,255,0.08)",
         minHeight: 0,
     },
+
     messageRow: {
         display: "flex",
         alignItems: "flex-end",
         gap: "12px",
         marginBottom: "18px",
     },
+
     botAvatar: {
         width: "42px",
         height: "42px",
@@ -879,6 +915,7 @@ const styles = {
         flexShrink: 0,
         boxShadow: "0 8px 18px rgba(37,99,235,0.35)",
     },
+
     userAvatar: {
         width: "42px",
         height: "42px",
@@ -892,6 +929,7 @@ const styles = {
         flexShrink: 0,
         boxShadow: "0 8px 18px rgba(34,197,94,0.35)",
     },
+
     messageBubble: {
         maxWidth: "78%",
         padding: "16px 18px",
@@ -899,17 +937,20 @@ const styles = {
         boxShadow: "0 10px 25px rgba(0,0,0,0.15)",
         wordBreak: "break-word",
     },
+
     botBubble: {
         background: "rgba(255,255,255,0.10)",
         color: "#f8fafc",
         borderTopLeftRadius: "8px",
         border: "1px solid rgba(255,255,255,0.08)",
     },
+
     userBubble: {
         background: "linear-gradient(135deg, #22c55e, #14b8a6)",
         color: "#ffffff",
         borderTopRightRadius: "8px",
     },
+
     deleteButton: {
         position: "absolute",
         top: "10px",
@@ -925,35 +966,43 @@ const styles = {
         alignItems: "center",
         cursor: "pointer",
     },
+
     messageSender: {
         fontSize: "13px",
         fontWeight: "700",
         marginBottom: "8px",
         opacity: 0.9,
     },
+
     messageText: {
         fontSize: "15px",
         lineHeight: "1.7",
         whiteSpace: "pre-wrap",
     },
+
     markdownWrapper: {
         fontSize: "15px",
         lineHeight: "1.75",
     },
+
     paragraph: {
         margin: "0 0 12px 0",
     },
+
     ul: {
         margin: "8px 0 12px 20px",
         padding: 0,
     },
+
     ol: {
         margin: "8px 0 12px 20px",
         padding: 0,
     },
+
     li: {
         marginBottom: "6px",
     },
+
     inlineCode: {
         background: "rgba(15, 23, 42, 0.7)",
         color: "#93c5fd",
@@ -962,6 +1011,7 @@ const styles = {
         fontSize: "13px",
         fontFamily: "Consolas, Monaco, monospace",
     },
+
     codeBlockWrapper: {
         marginTop: "10px",
         marginBottom: "14px",
@@ -970,6 +1020,7 @@ const styles = {
         border: "1px solid rgba(255,255,255,0.08)",
         background: "#111827",
     },
+
     codeHeader: {
         display: "flex",
         justifyContent: "space-between",
@@ -978,12 +1029,14 @@ const styles = {
         background: "#0b1220",
         borderBottom: "1px solid rgba(255,255,255,0.08)",
     },
+
     codeLanguage: {
         color: "#e5e7eb",
         fontSize: "13px",
         fontWeight: "700",
         textTransform: "capitalize",
     },
+
     copyButton: {
         display: "flex",
         alignItems: "center",
@@ -996,6 +1049,7 @@ const styles = {
         cursor: "pointer",
         fontSize: "13px",
     },
+
     syntaxHighlighter: {
         margin: 0,
         padding: "16px",
@@ -1004,27 +1058,32 @@ const styles = {
         lineHeight: "1.6",
         overflowX: "auto",
     },
+
     tableWrapper: {
         overflowX: "auto",
         marginTop: "10px",
         marginBottom: "14px",
         borderRadius: "12px",
     },
+
     table: {
         width: "100%",
         borderCollapse: "collapse",
         background: "rgba(255,255,255,0.06)",
     },
+
     th: {
         textAlign: "left",
         padding: "10px 12px",
         border: "1px solid rgba(255,255,255,0.08)",
         background: "rgba(255,255,255,0.08)",
     },
+
     td: {
         padding: "10px 12px",
         border: "1px solid rgba(255,255,255,0.08)",
     },
+
     blockquote: {
         margin: "10px 0",
         padding: "10px 14px",
@@ -1033,24 +1092,29 @@ const styles = {
         borderRadius: "8px",
         color: "#dbeafe",
     },
+
     h1: {
         fontSize: "24px",
         margin: "8px 0 12px 0",
     },
+
     h2: {
         fontSize: "20px",
         margin: "8px 0 12px 0",
     },
+
     h3: {
         fontSize: "17px",
         margin: "8px 0 10px 0",
     },
+
     typingDots: {
         display: "flex",
         gap: "6px",
         alignItems: "center",
         height: "24px",
     },
+
     dot: {
         width: "8px",
         height: "8px",
@@ -1058,6 +1122,7 @@ const styles = {
         background: "#cbd5e1",
         display: "inline-block",
     },
+
     inputArea: {
         marginTop: "18px",
         display: "flex",
@@ -1065,6 +1130,7 @@ const styles = {
         alignItems: "center",
         flexShrink: 0,
     },
+
     input: {
         flex: 1,
         height: "58px",
@@ -1077,125 +1143,147 @@ const styles = {
         outline: "none",
         backdropFilter: "blur(8px)",
     },
+
     button: {
         height: "58px",
         minWidth: "120px",
+        padding: "0 28px",
         borderRadius: "18px",
         border: "none",
         background: "linear-gradient(135deg, #3b82f6, #8b5cf6)",
         color: "#fff",
-        fontSize: "16px",
         fontWeight: "700",
+        fontSize: "16px",
         cursor: "pointer",
         boxShadow: "0 10px 25px rgba(59,130,246,0.35)",
-        transition: "transform 0.2s, box-shadow 0.2s",
-        "&:hover": {
-            transform: "translateY(-2px)",
-            boxShadow: "0 15px 30px rgba(59,130,246,0.45)",
-        },
     },
+
     historyOverlay: {
         position: "absolute",
-        top: 0,
-        left: 0,
-        width: "100%",
-        height: "100%",
-        background: "rgba(0,0,0,0.6)",
-        backdropFilter: "blur(8px)",
-        zIndex: 100,
+        inset: 0,
+        background: "rgba(0,0,0,0.35)",
+        backdropFilter: "blur(6px)",
+        zIndex: 10,
         display: "flex",
-        justifyContent: "flex-start",
+        justifyContent: "flex-end",
     },
+
     historyPanel: {
-        width: "350px",
+        width: "380px",
         height: "100%",
-        background: "rgba(15, 23, 42, 0.95)",
-        borderRight: "1px solid rgba(255,255,255,0.1)",
+        background: "rgba(15,23,42,0.95)",
+        borderLeft: "1px solid rgba(255,255,255,0.08)",
+        padding: "20px",
         display: "flex",
         flexDirection: "column",
-        padding: "24px",
     },
+
     historyHeader: {
         display: "flex",
         justifyContent: "space-between",
         alignItems: "center",
-        marginBottom: "24px",
+        marginBottom: "18px",
     },
+
     historyHeaderLeft: {
         display: "flex",
         alignItems: "center",
         gap: "10px",
         color: "#fff",
     },
+
     historyTitle: {
         margin: 0,
         fontSize: "18px",
+        color: "#fff",
     },
+
     iconButton: {
-        background: "transparent",
-        border: "none",
-        color: "rgba(255,255,255,0.6)",
+        width: "36px",
+        height: "36px",
+        borderRadius: "10px",
+        border: "1px solid rgba(255,255,255,0.12)",
+        background: "rgba(255,255,255,0.08)",
+        color: "#fff",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
         cursor: "pointer",
-        padding: "4px",
     },
+
     historyList: {
         flex: 1,
         overflowY: "auto",
+        display: "flex",
+        flexDirection: "column",
+        gap: "12px",
     },
+
     emptyHistory: {
-        color: "rgba(255,255,255,0.4)",
-        textAlign: "center",
-        marginTop: "40px",
-    },
-    historyItem: {
-        padding: "14px",
+        color: "rgba(255,255,255,0.6)",
+        padding: "16px",
         borderRadius: "12px",
+        background: "rgba(255,255,255,0.04)",
+    },
+
+    historyItem: {
+        display: "flex",
+        gap: "10px",
+        alignItems: "center",
+        padding: "12px",
+        borderRadius: "14px",
         background: "rgba(255,255,255,0.05)",
-        marginBottom: "12px",
-        cursor: "pointer",
-        border: "1px solid transparent",
-        transition: "all 0.2s",
-        "&:hover": {
-            background: "rgba(255,255,255,0.08)",
-            borderColor: "rgba(255,255,255,0.1)",
-        },
+        border: "1px solid rgba(255,255,255,0.06)",
     },
+
     historyContent: {
-        marginBottom: "8px",
+        flex: 1,
+        cursor: "pointer",
+        minWidth: 0,
     },
+
     historyItemTitle: {
         color: "#fff",
         fontSize: "14px",
         fontWeight: "600",
+        marginBottom: "4px",
         whiteSpace: "nowrap",
         overflow: "hidden",
         textOverflow: "ellipsis",
     },
+
     historyItemMeta: {
-        color: "rgba(255,255,255,0.5)",
+        color: "rgba(255,255,255,0.62)",
         fontSize: "12px",
-        marginTop: "4px",
     },
+
     historyItemActions: {
         display: "flex",
+        alignItems: "center",
         gap: "8px",
     },
+
     historyLoadBtn: {
-        flex: 1,
-        padding: "6px",
-        borderRadius: "6px",
-        border: "1px solid rgba(59,130,246,0.3)",
-        background: "rgba(59,130,246,0.1)",
-        color: "#60a5fa",
-        fontSize: "12px",
+        border: "none",
+        background: "linear-gradient(135deg, #3b82f6, #8b5cf6)",
+        color: "#fff",
+        borderRadius: "8px",
+        padding: "8px 12px",
         cursor: "pointer",
+        fontSize: "12px",
+        fontWeight: "600",
     },
+
     historyDeleteBtn: {
-        padding: "6px 10px",
-        borderRadius: "6px",
-        border: "1px solid rgba(239,68,68,0.3)",
-        background: "rgba(239,68,68,0.1)",
-        color: "#f87171",
+        width: "34px",
+        height: "34px",
+        borderRadius: "8px",
+        border: "1px solid rgba(255,255,255,0.08)",
+        background: "rgba(255,255,255,0.06)",
+        color: "#fff",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
         cursor: "pointer",
     },
 };
