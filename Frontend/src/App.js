@@ -44,7 +44,7 @@ function App() {
     const hasAskedOnce = useRef(false);
 
     const scrollToBottom = () => {
-        chatEndRef.current?.scrollIntoView({
+        chatEndRef.current ? .scrollIntoView({
             behavior: "smooth"
         });
     };
@@ -62,7 +62,7 @@ function App() {
             setHistory((prev) => [{
                     id: Date.now(),
                     timestamp: new Date().toLocaleString(),
-                    title: messages.find((m) => m.from === userName)?.text?.slice(0, 40) ||
+                    title: messages.find((m) => m.from === userName) ? .text ? .slice(0, 40) ||
                         "New Chat",
                     messages: [...messages],
                 },
@@ -96,7 +96,7 @@ function App() {
         setLoading(true);
 
         try {
-            const baseUrl = process.env.REACT_APP_API_URL || "http://localhost:8080";
+            const baseUrl = (process.env.REACT_APP_API_URL || "http://localhost:8080").replace(/\/$/, "");
             const response = await axios.get(`${baseUrl}/user/chat`, {
                 params: {
                     question
@@ -178,10 +178,8 @@ function App() {
                 /> <
                 h3 style = {
                     styles.historyTitle
-                } > Chat History < /h3> < /
-                div >
-
-                <
+                } > Chat History < /h3> <
+                /div> <
                 button onClick = {
                     () => setShowHistory(false)
                 }
@@ -192,11 +190,9 @@ function App() {
                 FiX size = {
                     18
                 }
-                /> < /
-                button > <
-                /div>
-
-                <
+                /> <
+                /button> <
+                /div> <
                 div style = {
                     styles.historyList
                 } > {
@@ -229,14 +225,12 @@ function App() {
                                 styles.historyItemMeta
                             } > {
                                 item.timestamp
-                            }â€¢ {
+                            }• {
                                 item.messages.length
                             }
                             messages <
-                            /div> < /
-                            div >
-
-                            <
+                            /div> <
+                            /div> <
                             div style = {
                                 styles.historyItemActions
                             } >
@@ -246,9 +240,7 @@ function App() {
                             }
                             style = {
                                 styles.historyLoadBtn
-                            } >
-                            Load <
-                            /button> <
+                            } > Load < /button> <
                             button onClick = {
                                 () => deleteHistory(item.id)
                             }
@@ -259,15 +251,15 @@ function App() {
                             FiTrash2 size = {
                                 14
                             }
-                            /> < /
-                            button > <
-                            /div> < /
-                            div >
+                            /> <
+                            /button> <
+                            /div> <
+                            /div>
                         ))
                     )
                 } <
-                /div> < /
-                div > <
+                /div> <
+                /div> <
                 /div>
             )
         }
@@ -288,10 +280,8 @@ function App() {
         RiRobot3Fill style = {
             styles.logoIcon
         }
-        /> < /
-        div >
-
-        <
+        /> <
+        /div> <
         div style = {
             styles.headerText
         } >
@@ -301,12 +291,8 @@ function App() {
         } > Kairo AI Chat < /h1> <
         p style = {
             styles.subtitle
-        } >
-        Smart assistantâ€¢ Markdown + Code Support <
-        /p> < /
-        div >
-
-        <
+        } > Smart assistant• Markdown + Code Support < /p> <
+        /div> <
         div style = {
             styles.headerActions
         } >
@@ -322,10 +308,8 @@ function App() {
         FiClock size = {
             18
         }
-        /> < /
-        button >
-
-        <
+        /> <
+        /button> <
         button onClick = {
             clearChat
         }
@@ -337,10 +321,10 @@ function App() {
         FiTrash2 size = {
             18
         }
-        /> < /
-        button > <
-        /div> < /
-        div >
+        /> <
+        /button> <
+        /div> <
+        /div>
 
         <
         div style = {
@@ -348,7 +332,6 @@ function App() {
         } > {
             messages.map((msg, idx) => {
                 const isUser = msg.from === userName;
-
                 return ( <
                     div key = {
                         idx
@@ -356,7 +339,7 @@ function App() {
                     style = {
                         {
                             ...styles.messageRow,
-                            justifyContent: isUser ? "flex-end" : "flex-start",
+                            justifyContent: isUser ? "flex-end" : "flex-start"
                         }
                     } > {
                         !isUser && ( <
@@ -368,15 +351,13 @@ function App() {
                             <
                             /div>
                         )
-                    }
-
-                    <
+                    } <
                     div style = {
                         {
                             ...styles.messageBubble,
                             ...(isUser ? styles.userBubble : styles.botBubble),
                             position: "relative",
-                            paddingRight: "46px",
+                            paddingRight: "46px"
                         }
                     } >
                     <
@@ -384,9 +365,7 @@ function App() {
                         styles.messageSender
                     } > {
                         msg.from
-                    } < /div>
-
-                    {
+                    } < /div> {
                         isUser ? ( <
                             div style = {
                                 styles.messageText
@@ -399,9 +378,7 @@ function App() {
                             }
                             />
                         )
-                    }
-
-                    <
+                    } <
                     button onClick = {
                         () => deleteMessage(idx)
                     }
@@ -413,11 +390,9 @@ function App() {
                     FiTrash2 size = {
                         14
                     }
-                    /> < /
-                    button > <
-                    /div>
-
-                    {
+                    /> <
+                    /button> <
+                    /div> {
                         isUser && ( <
                             div style = {
                                 styles.userAvatar
@@ -431,9 +406,7 @@ function App() {
                     /div>
                 );
             })
-        }
-
-        {
+        } {
             loading && ( <
                 div style = {
                     {
@@ -461,17 +434,15 @@ function App() {
                 } > Kairo < /div> <
                 TypingDots / >
                 <
-                /div> < /
-                div >
+                /div> <
+                /div>
             )
-        }
-
-        <
+        } <
         div ref = {
             chatEndRef
         }
-        /> < /
-        div >
+        /> <
+        /div>
 
         <
         div style = {
@@ -500,10 +471,10 @@ function App() {
             sendMessage
         } >
         Send <
-        /button> < /
-        div > <
-        /div> < /
-        div >
+        /button> <
+        /div> <
+        /div> <
+        /div>
     );
 }
 
@@ -511,782 +482,676 @@ function MarkdownMessage({
     content
 }) {
     return ( <
-        div style = {
-            styles.markdownWrapper
-        } >
-        <
-        ReactMarkdown remarkPlugins = {
-            [remarkGfm]
-        }
-        components = {
-            {
-                code({
-                        inline,
-                        className,
-                        children,
-                        ...props
-                    }) {
-                        const match = /language-(\w+)/.exec(className || "");
-                        const language = match ? match[1] : "text";
-                        const codeText = String(children).replace(/\n$/, "");
-
-                        if (!inline) {
-                            return <CodeBlock code = {
-                                codeText
+            div style = {
+                styles.markdownWrapper
+            } >
+            <
+            ReactMarkdown remarkPlugins = {
+                [remarkGfm]
+            }
+            components = {
+                {
+                    code({
+                            inline,
+                            className,
+                            children,
+                            ...props
+                        }) {
+                            const match = /language-(\w+)/.exec(className || "");
+                            const language = match ? match[1] : "text";
+                            const codeText = String(children).replace(/\n$/, "");
+                            if (!inline) {
+                                return <CodeBlock code = {
+                                    codeText
+                                }
+                                language = {
+                                    language
+                                }
+                                />;
                             }
-                            language = {
-                                language
-                            }
-                            />;
-                        }
-
-                        return ( <
-                            code style = {
-                                styles.inlineCode
-                            } {
-                                ...props
+                            return ( <
+                                code style = {
+                                    styles.inlineCode
+                                } {
+                                    ...props
+                                } > {
+                                    children
+                                } <
+                                /code>
+                            );
+                        },
+                        p({
+                            children
+                        }) {
+                            return <p style = {
+                                styles.paragraph
                             } > {
                                 children
-                            } <
-                            /code>
-                        );
-                    },
-                    p({
-                        children
-                    }) {
-                        return <p style = {
-                            styles.paragraph
-                        } > {
-                            children
-                        } < /p>;
-                    },
-                    ul({
-                        children
-                    }) {
-                        return <ul style = {
-                            styles.ul
-                        } > {
-                            children
-                        } < /ul>;
-                    },
-                    ol({
-                        children
-                    }) {
-                        return <ol style = {
-                            styles.ol
-                        } > {
-                            children
-                        } < /ol>;
-                    },
-                    li({
-                        children
-                    }) {
-                        return <li style = {
-                            styles.li
-                        } > {
-                            children
-                        } < /li>;
-                    },
-                    table({
-                        children
-                    }) {
-                        return ( <
-                            div style = {
-                                styles.tableWrapper
-                            } >
-                            <
-                            table style = {
-                                styles.table
-                            } > {
-                                children
-                            } < /table> < /
-                            div >
-                        );
-                    },
-                    th({
-                        children
-                    }) {
-                        return <th style = {
-                            styles.th
-                        } > {
-                            children
-                        } < /th>;
-                    },
-                    td({
-                        children
-                    }) {
-                        return <td style = {
-                            styles.td
-                        } > {
-                            children
-                        } < /td>;
-                    },
-                    blockquote({
-                        children
-                    }) {
-                        return <blockquote style = {
-                            styles.blockquote
-                        } > {
-                            children
-                        } < /blockquote>;
-                    },
-                    h1({
-                        children
-                    }) {
-                        return <h1 style = {
-                            styles.h1
-                        } > {
-                            children
-                        } < /h1>;
-                    },
-                    h2({
-                        children
-                    }) {
-                        return <h2 style = {
-                            styles.h2
-                        } > {
-                            children
-                        } < /h2>;
-                    },
-                    h3({
-                        children
-                    }) {
-                        return <h3 style = {
-                            styles.h3
-                        } > {
-                            children
-                        } < /h3>;
-                    },
-            }
-        } > {
-            content
-        } <
-        /ReactMarkdown> < /
-        div >
-    );
-}
-
-function CodeBlock({
-    code,
-    language
-}) {
-    const [copied, setCopied] = useState(false);
-
-    const handleCopy = () => {
-        setCopied(true);
-        setTimeout(() => setCopied(false), 1500);
-    };
-
-    return ( <
-        div style = {
-            styles.codeBlockWrapper
-        } >
-        <
-        div style = {
-            styles.codeHeader
-        } >
-        <
-        span style = {
-            styles.codeLanguage
-        } > {
-            language && language !== "text" ? language : "code"
-        } <
-        /span>
-
-        <
-        CopyToClipboard text = {
-            code
-        }
-        onCopy = {
-            handleCopy
-        } >
-        <
-        button style = {
-            styles.copyButton
-        } > {
-            copied ? < FiCheck size = {
-                16
-            }
-            /> : <FiCopy size={16} / >
-        } <
-        span > {
-            copied ? "Copied" : "Copy"
-        } < /span> < /
-        button > <
-        /CopyToClipboard> < /
-        div >
-
-        <
-        SyntaxHighlighter language = {
-            language
-        }
-        style = {
-            vscDarkPlus
-        }
-        customStyle = {
-            styles.syntaxHighlighter
-        }
-        wrapLongLines = {
-            true
-        } > {
-            code
-        } <
-        /SyntaxHighlighter> < /
-        div >
-    );
-}
-
-function TypingDots() {
-    return ( <
-        div style = {
-            styles.typingDots
-        } >
-        <
-        span style = {
-            styles.dot
-        } > < /span> <
-        span style = {
-            styles.dot
-        } > < /span> <
-        span style = {
-            styles.dot
-        } > < /span> < /
-        div >
-    );
-}
-
-const styles = {
-    page: {
-        height: "100vh",
-        width: "100vw",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        background: "radial-gradient(circle at top left, #12254a 0%, #0f172a 30%, #111827 65%, #1e1b4b 100%)",
-        fontFamily: "'Inter', 'Segoe UI', sans-serif",
-        position: "fixed",
-        top: 0,
-        left: 0,
-        overflow: "hidden",
-    },
-
-    backgroundGlow1: {
-        position: "absolute",
-        width: "420px",
-        height: "420px",
-        borderRadius: "50%",
-        background: "rgba(59,130,246,0.18)",
-        top: "5%",
-        left: "5%",
-        filter: "blur(100px)",
-    },
-
-    backgroundGlow2: {
-        position: "absolute",
-        width: "380px",
-        height: "380px",
-        borderRadius: "50%",
-        background: "rgba(168,85,247,0.16)",
-        bottom: "8%",
-        right: "8%",
-        filter: "blur(100px)",
-    },
-
-    backgroundGlow3: {
-        position: "absolute",
-        width: "260px",
-        height: "260px",
-        borderRadius: "50%",
-        background: "rgba(14,165,233,0.12)",
-        bottom: "20%",
-        left: "30%",
-        filter: "blur(90px)",
-    },
-
-    container: {
-        width: "96vw",
-        height: "94vh",
-        maxWidth: "1500px",
-        display: "flex",
-        flexDirection: "column",
-        background: "rgba(255,255,255,0.08)",
-        backdropFilter: "blur(18px)",
-        WebkitBackdropFilter: "blur(18px)",
-        border: "1px solid rgba(255,255,255,0.12)",
-        borderRadius: "28px",
-        boxShadow: "0 25px 80px rgba(0,0,0,0.35)",
-        padding: "24px",
-        position: "relative",
-        zIndex: 2,
-    },
-
-    header: {
-        display: "flex",
-        alignItems: "center",
-        gap: "16px",
-        marginBottom: "18px",
-        paddingBottom: "16px",
-        borderBottom: "1px solid rgba(255,255,255,0.10)",
-        flexShrink: 0,
-    },
-
-    logoBox: {
-        width: "64px",
-        height: "64px",
-        borderRadius: "20px",
-        background: "linear-gradient(135deg, #3b82f6, #8b5cf6)",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        boxShadow: "0 10px 30px rgba(59,130,246,0.35)",
-        flexShrink: 0,
-    },
-
-    logoIcon: {
-        fontSize: "32px",
-        color: "#fff",
-    },
-
-    headerText: {
-        minWidth: 0,
-    },
-
-    headerActions: {
-        marginLeft: "auto",
-        display: "flex",
-        alignItems: "center",
-        gap: "10px",
-    },
-
-    headerIconBtn: {
-        width: "42px",
-        height: "42px",
-        borderRadius: "12px",
-        border: "1px solid rgba(255,255,255,0.12)",
-        background: "rgba(255,255,255,0.08)",
-        color: "#fff",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        cursor: "pointer",
-    },
-
-    title: {
-        margin: 0,
-        color: "#ffffff",
-        fontSize: "clamp(28px, 3vw, 42px)",
-        fontWeight: "800",
-        letterSpacing: "0.3px",
-    },
-
-    subtitle: {
-        margin: "4px 0 0 0",
-        color: "rgba(255,255,255,0.72)",
-        fontSize: "15px",
-    },
-
-    chatBox: {
-        flex: 1,
-        overflowY: "auto",
-        padding: "20px",
-        borderRadius: "22px",
-        background: "rgba(255,255,255,0.04)",
-        border: "1px solid rgba(255,255,255,0.08)",
-        minHeight: 0,
-    },
-
-    messageRow: {
-        display: "flex",
-        alignItems: "flex-end",
-        gap: "12px",
-        marginBottom: "18px",
-    },
-
-    botAvatar: {
-        width: "42px",
-        height: "42px",
-        borderRadius: "50%",
-        background: "linear-gradient(135deg, #2563eb, #7c3aed)",
-        color: "#fff",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        fontSize: "20px",
-        flexShrink: 0,
-        boxShadow: "0 8px 18px rgba(37,99,235,0.35)",
-    },
-
-    userAvatar: {
-        width: "42px",
-        height: "42px",
-        borderRadius: "50%",
-        background: "linear-gradient(135deg, #22c55e, #14b8a6)",
-        color: "#fff",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        fontSize: "18px",
-        flexShrink: 0,
-        boxShadow: "0 8px 18px rgba(34,197,94,0.35)",
-    },
-
-    messageBubble: {
-        maxWidth: "78%",
-        padding: "16px 18px",
-        borderRadius: "20px",
-        boxShadow: "0 10px 25px rgba(0,0,0,0.15)",
-        wordBreak: "break-word",
-    },
-
-    botBubble: {
-        background: "rgba(255,255,255,0.10)",
-        color: "#f8fafc",
-        borderTopLeftRadius: "8px",
-        border: "1px solid rgba(255,255,255,0.08)",
-    },
-
-    userBubble: {
-        background: "linear-gradient(135deg, #22c55e, #14b8a6)",
-        color: "#ffffff",
-        borderTopRightRadius: "8px",
-    },
-
-    deleteButton: {
-        position: "absolute",
-        top: "10px",
-        right: "10px",
-        width: "26px",
-        height: "26px",
-        borderRadius: "8px",
-        border: "none",
-        background: "rgba(0,0,0,0.18)",
-        color: "#fff",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        cursor: "pointer",
-    },
-
-    messageSender: {
-        fontSize: "13px",
-        fontWeight: "700",
-        marginBottom: "8px",
-        opacity: 0.9,
-    },
-
-    messageText: {
-        fontSize: "15px",
-        lineHeight: "1.7",
-        whiteSpace: "pre-wrap",
-    },
-
-    markdownWrapper: {
-        fontSize: "15px",
-        lineHeight: "1.75",
-    },
-
-    paragraph: {
-        margin: "0 0 12px 0",
-    },
-
-    ul: {
-        margin: "8px 0 12px 20px",
-        padding: 0,
-    },
-
-    ol: {
-        margin: "8px 0 12px 20px",
-        padding: 0,
-    },
-
-    li: {
-        marginBottom: "6px",
-    },
-
-    inlineCode: {
-        background: "rgba(15, 23, 42, 0.7)",
-        color: "#93c5fd",
-        padding: "2px 6px",
-        borderRadius: "6px",
-        fontSize: "13px",
-        fontFamily: "Consolas, Monaco, monospace",
-    },
-
-    codeBlockWrapper: {
-        marginTop: "10px",
-        marginBottom: "14px",
-        borderRadius: "14px",
-        overflow: "hidden",
-        border: "1px solid rgba(255,255,255,0.08)",
-        background: "#111827",
-    },
-
-    codeHeader: {
-        display: "flex",
-        justifyContent: "space-between",
-        alignItems: "center",
-        padding: "10px 14px",
-        background: "#0b1220",
-        borderBottom: "1px solid rgba(255,255,255,0.08)",
-    },
-
-    codeLanguage: {
-        color: "#e5e7eb",
-        fontSize: "13px",
-        fontWeight: "700",
-        textTransform: "capitalize",
-    },
-
-    copyButton: {
-        display: "flex",
-        alignItems: "center",
-        gap: "6px",
-        background: "transparent",
-        border: "1px solid rgba(255,255,255,0.12)",
-        color: "#e5e7eb",
-        padding: "6px 10px",
-        borderRadius: "8px",
-        cursor: "pointer",
-        fontSize: "13px",
-    },
-
-    syntaxHighlighter: {
-        margin: 0,
-        padding: "16px",
-        background: "#111827",
-        fontSize: "14px",
-        lineHeight: "1.6",
-        overflowX: "auto",
-    },
-
-    tableWrapper: {
-        overflowX: "auto",
-        marginTop: "10px",
-        marginBottom: "14px",
-        borderRadius: "12px",
-    },
-
-    table: {
-        width: "100%",
-        borderCollapse: "collapse",
-        background: "rgba(255,255,255,0.06)",
-    },
-
-    th: {
-        textAlign: "left",
-        padding: "10px 12px",
-        border: "1px solid rgba(255,255,255,0.08)",
-        background: "rgba(255,255,255,0.08)",
-    },
-
-    td: {
-        padding: "10px 12px",
-        border: "1px solid rgba(255,255,255,0.08)",
-    },
-
-    blockquote: {
-        margin: "10px 0",
-        padding: "10px 14px",
-        borderLeft: "4px solid #60a5fa",
-        background: "rgba(96,165,250,0.08)",
-        borderRadius: "8px",
-        color: "#dbeafe",
-    },
-
-    h1: {
-        fontSize: "24px",
-        margin: "8px 0 12px 0",
-    },
-
-    h2: {
-        fontSize: "20px",
-        margin: "8px 0 12px 0",
-    },
-
-    h3: {
-        fontSize: "17px",
-        margin: "8px 0 10px 0",
-    },
-
-    typingDots: {
-        display: "flex",
-        gap: "6px",
-        alignItems: "center",
-        height: "24px",
-    },
-
-    dot: {
-        width: "8px",
-        height: "8px",
-        borderRadius: "50%",
-        background: "#cbd5e1",
-        display: "inline-block",
-    },
-
-    inputArea: {
-        marginTop: "18px",
-        display: "flex",
-        gap: "14px",
-        alignItems: "center",
-        flexShrink: 0,
-    },
-
-    input: {
-        flex: 1,
-        height: "58px",
-        padding: "0 20px",
-        borderRadius: "18px",
-        border: "1px solid rgba(255,255,255,0.14)",
-        background: "rgba(255,255,255,0.08)",
-        color: "#fff",
-        fontSize: "16px",
-        outline: "none",
-        backdropFilter: "blur(8px)",
-    },
-
-    button: {
-        height: "58px",
-        minWidth: "120px",
-        padding: "0 28px",
-        borderRadius: "18px",
-        border: "none",
-        background: "linear-gradient(135deg, #3b82f6, #8b5cf6)",
-        color: "#fff",
-        fontWeight: "700",
-        fontSize: "16px",
-        cursor: "pointer",
-        boxShadow: "0 10px 25px rgba(59,130,246,0.35)",
-    },
-
-    historyOverlay: {
-        position: "absolute",
-        inset: 0,
-        background: "rgba(0,0,0,0.35)",
-        backdropFilter: "blur(6px)",
-        zIndex: 10,
-        display: "flex",
-        justifyContent: "flex-end",
-    },
-
-    historyPanel: {
-        width: "380px",
-        height: "100%",
-        background: "rgba(15,23,42,0.95)",
-        borderLeft: "1px solid rgba(255,255,255,0.08)",
-        padding: "20px",
-        display: "flex",
-        flexDirection: "column",
-    },
-
-    historyHeader: {
-        display: "flex",
-        justifyContent: "space-between",
-        alignItems: "center",
-        marginBottom: "18px",
-    },
-
-    historyHeaderLeft: {
-        display: "flex",
-        alignItems: "center",
-        gap: "10px",
-        color: "#fff",
-    },
-
-    historyTitle: {
-        margin: 0,
-        fontSize: "18px",
-        color: "#fff",
-    },
-
-    iconButton: {
-        width: "36px",
-        height: "36px",
-        borderRadius: "10px",
-        border: "1px solid rgba(255,255,255,0.12)",
-        background: "rgba(255,255,255,0.08)",
-        color: "#fff",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        cursor: "pointer",
-    },
-
-    historyList: {
-        flex: 1,
-        overflowY: "auto",
-        display: "flex",
-        flexDirection: "column",
-        gap: "12px",
-    },
-
-    emptyHistory: {
-        color: "rgba(255,255,255,0.6)",
-        padding: "16px",
-        borderRadius: "12px",
-        background: "rgba(255,255,255,0.04)",
-    },
-
-    historyItem: {
-        display: "flex",
-        gap: "10px",
-        alignItems: "center",
-        padding: "12px",
-        borderRadius: "14px",
-        background: "rgba(255,255,255,0.05)",
-        border: "1px solid rgba(255,255,255,0.06)",
-    },
-
-    historyContent: {
-        flex: 1,
-        cursor: "pointer",
-        minWidth: 0,
-    },
-
-    historyItemTitle: {
-        color: "#fff",
-        fontSize: "14px",
-        fontWeight: "600",
-        marginBottom: "4px",
-        whiteSpace: "nowrap",
-        overflow: "hidden",
-        textOverflow: "ellipsis",
-    },
-
-    historyItemMeta: {
-        color: "rgba(255,255,255,0.62)",
-        fontSize: "12px",
-    },
-
-    historyItemActions: {
-        display: "flex",
-        alignItems: "center",
-        gap: "8px",
-    },
-
-    historyLoadBtn: {
-        border: "none",
-        background: "linear-gradient(135deg, #3b82f6, #8b5cf6)",
-        color: "#fff",
-        borderRadius: "8px",
-        padding: "8px 12px",
-        cursor: "pointer",
-        fontSize: "12px",
-        fontWeight: "600",
-    },
-
-    historyDeleteBtn: {
-        width: "34px",
-        height: "34px",
-        borderRadius: "8px",
-        border: "1px solid rgba(255,255,255,0.08)",
-        background: "rgba(255,255,255,0.06)",
-        color: "#fff",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        cursor: "pointer",
-    },
-};
-
-export default App;
-
+                            } < /p>; },
+                            ul({
+                                    children
+                                }) {
+                                    return <ul style = {
+                                        styles.ul
+                                    } > {
+                                        children
+                                    } < /ul>; },
+                                    ol({
+                                            children
+                                        }) {
+                                            return <ol style = {
+                                                styles.ol
+                                            } > {
+                                                children
+                                            } < /ol>; },
+                                            li({
+                                                    children
+                                                }) {
+                                                    return <li style = {
+                                                        styles.li
+                                                    } > {
+                                                        children
+                                                    } < /li>; },
+                                                    table({
+                                                            children
+                                                        }) {
+                                                            return ( <
+                                                                div style = {
+                                                                    styles.tableWrapper
+                                                                } >
+                                                                <
+                                                                table style = {
+                                                                    styles.table
+                                                                } > {
+                                                                    children
+                                                                } < /table> <
+                                                                /div>
+                                                            );
+                                                        },
+                                                        th({
+                                                            children
+                                                        }) {
+                                                            return <th style = {
+                                                                styles.th
+                                                            } > {
+                                                                children
+                                                            } < /th>; },
+                                                            td({
+                                                                    children
+                                                                }) {
+                                                                    return <td style = {
+                                                                        styles.td
+                                                                    } > {
+                                                                        children
+                                                                    } < /td>; },
+                                                                    blockquote({
+                                                                        children
+                                                                    }) {
+                                                                        return <blockquote style = {
+                                                                            styles.blockquote
+                                                                        } > {
+                                                                            children
+                                                                        } < /blockquote>; },
+                                                                        h1({
+                                                                            children
+                                                                        }) {
+                                                                            return <h1 style = {
+                                                                                styles.h1
+                                                                            } > {
+                                                                                children
+                                                                            } < /h1>; },
+                                                                            h2({
+                                                                                    children
+                                                                                }) {
+                                                                                    return <h2 style = {
+                                                                                        styles.h2
+                                                                                    } > {
+                                                                                        children
+                                                                                    } < /h2>; },
+                                                                                    h3({
+                                                                                        children
+                                                                                    }) {
+                                                                                        return <h3 style = {
+                                                                                            styles.h3
+                                                                                        } > {
+                                                                                            children
+                                                                                        } < /h3>; },
+                                                                                    }
+                                                                                } >
+                                                                                {
+                                                                                    content
+                                                                                } <
+                                                                                /ReactMarkdown> <
+                                                                                /div>
+                                                                        );
+                                                                    }
+
+                                                                    function CodeBlock({
+                                                                        code,
+                                                                        language
+                                                                    }) {
+                                                                        const [copied, setCopied] = useState(false);
+                                                                        const handleCopy = () => {
+                                                                            setCopied(true);
+                                                                            setTimeout(() => setCopied(false), 2000);
+                                                                        };
+                                                                        return ( <
+                                                                            div style = {
+                                                                                styles.codeBlockContainer
+                                                                            } >
+                                                                            <
+                                                                            div style = {
+                                                                                styles.codeHeader
+                                                                            } >
+                                                                            <
+                                                                            span style = {
+                                                                                styles.codeLang
+                                                                            } > {
+                                                                                language
+                                                                            } < /span> <
+                                                                            CopyToClipboard text = {
+                                                                                code
+                                                                            }
+                                                                            onCopy = {
+                                                                                handleCopy
+                                                                            } >
+                                                                            <
+                                                                            button style = {
+                                                                                styles.copyBtn
+                                                                            } > {
+                                                                                copied ? < FiCheck size = {
+                                                                                    14
+                                                                                }
+                                                                                /> : <FiCopy size={14} / >
+                                                                            } <
+                                                                            span > {
+                                                                                copied ? "Copied" : "Copy"
+                                                                            } < /span> <
+                                                                            /button> <
+                                                                            /CopyToClipboard> <
+                                                                            /div> <
+                                                                            SyntaxHighlighter language = {
+                                                                                language
+                                                                            }
+                                                                            style = {
+                                                                                vscDarkPlus
+                                                                            }
+                                                                            customStyle = {
+                                                                                styles.syntaxContent
+                                                                            } >
+                                                                            {
+                                                                                code
+                                                                            } <
+                                                                            /SyntaxHighlighter> <
+                                                                            /div>
+                                                                        );
+                                                                    }
+
+                                                                    function TypingDots() {
+                                                                        return ( <
+                                                                            div style = {
+                                                                                styles.typing
+                                                                            } >
+                                                                            <
+                                                                            span style = {
+                                                                                styles.dot
+                                                                            } > < /span> <
+                                                                            span style = {
+                                                                                styles.dot
+                                                                            } > < /span> <
+                                                                            span style = {
+                                                                                styles.dot
+                                                                            } > < /span> <
+                                                                            /div>
+                                                                        );
+                                                                    }
+
+                                                                    const styles = {
+                                                                        page: {
+                                                                            width: "100vw",
+                                                                            height: "100vh",
+                                                                            background: "#0a0b10",
+                                                                            display: "flex",
+                                                                            alignItems: "center",
+                                                                            justifyContent: "center",
+                                                                            overflow: "hidden",
+                                                                            position: "relative",
+                                                                            fontFamily: "'Inter', sans-serif",
+                                                                            color: "#fff",
+                                                                        },
+                                                                        backgroundGlow1: {
+                                                                            position: "absolute",
+                                                                            width: "500px",
+                                                                            height: "500px",
+                                                                            background: "radial-gradient(circle, rgba(99, 102, 241, 0.15) 0%, transparent 70%)",
+                                                                            top: "-100px",
+                                                                            right: "-100px",
+                                                                        },
+                                                                        backgroundGlow2: {
+                                                                            position: "absolute",
+                                                                            width: "600px",
+                                                                            height: "600px",
+                                                                            background: "radial-gradient(circle, rgba(168, 85, 247, 0.1) 0%, transparent 70%)",
+                                                                            bottom: "-150px",
+                                                                            left: "-150px",
+                                                                        },
+                                                                        backgroundGlow3: {
+                                                                            position: "absolute",
+                                                                            width: "400px",
+                                                                            height: "400px",
+                                                                            background: "radial-gradient(circle, rgba(59, 130, 246, 0.08) 0%, transparent 70%)",
+                                                                            top: "40%",
+                                                                            left: "20%",
+                                                                        },
+                                                                        container: {
+                                                                            width: "90%",
+                                                                            maxWidth: "1000px",
+                                                                            height: "85vh",
+                                                                            background: "rgba(23, 25, 35, 0.8)",
+                                                                            backdropFilter: "blur(20px)",
+                                                                            borderRadius: "24px",
+                                                                            border: "1px solid rgba(255, 255, 255, 0.1)",
+                                                                            display: "flex",
+                                                                            flexDirection: "column",
+                                                                            boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.5)",
+                                                                            zIndex: 10,
+                                                                        },
+                                                                        header: {
+                                                                            padding: "20px 30px",
+                                                                            borderBottom: "1px solid rgba(255, 255, 255, 0.08)",
+                                                                            display: "flex",
+                                                                            alignItems: "center",
+                                                                            gap: "15px",
+                                                                        },
+                                                                        logoBox: {
+                                                                            width: "45px",
+                                                                            height: "45px",
+                                                                            background: "linear-gradient(135deg, #6366f1 0%, #a855f7 100%)",
+                                                                            borderRadius: "12px",
+                                                                            display: "flex",
+                                                                            alignItems: "center",
+                                                                            justifyContent: "center",
+                                                                            boxShadow: "0 8px 16px rgba(99, 102, 241, 0.3)",
+                                                                        },
+                                                                        logoIcon: {
+                                                                            fontSize: "24px",
+                                                                            color: "#fff",
+                                                                        },
+                                                                        headerText: {
+                                                                            flex: 1,
+                                                                        },
+                                                                        title: {
+                                                                            fontSize: "20px",
+                                                                            fontWeight: "700",
+                                                                            margin: 0,
+                                                                            background: "linear-gradient(to right, #fff, #cbd5e1)",
+                                                                            WebkitBackgroundClip: "text",
+                                                                            WebkitTextFillColor: "transparent",
+                                                                        },
+                                                                        subtitle: {
+                                                                            fontSize: "12px",
+                                                                            color: "#94a3b8",
+                                                                            margin: "2px 0 0 0",
+                                                                        },
+                                                                        headerActions: {
+                                                                            display: "flex",
+                                                                            gap: "10px",
+                                                                        },
+                                                                        headerIconBtn: {
+                                                                            background: "rgba(255, 255, 255, 0.05)",
+                                                                            border: "1px solid rgba(255, 255, 255, 0.1)",
+                                                                            color: "#94a3b8",
+                                                                            width: "38px",
+                                                                            height: "38px",
+                                                                            borderRadius: "10px",
+                                                                            display: "flex",
+                                                                            alignItems: "center",
+                                                                            justifyContent: "center",
+                                                                            cursor: "pointer",
+                                                                            transition: "all 0.2s ease",
+                                                                        },
+                                                                        chatBox: {
+                                                                            flex: 1,
+                                                                            overflowY: "auto",
+                                                                            padding: "30px",
+                                                                            display: "flex",
+                                                                            flexDirection: "column",
+                                                                            gap: "24px",
+                                                                            scrollBehavior: "smooth",
+                                                                        },
+                                                                        messageRow: {
+                                                                            display: "flex",
+                                                                            gap: "12px",
+                                                                            width: "100%",
+                                                                            animation: "fadeIn 0.3s ease-out forwards",
+                                                                        },
+                                                                        botAvatar: {
+                                                                            width: "36px",
+                                                                            height: "36px",
+                                                                            borderRadius: "10px",
+                                                                            background: "rgba(99, 102, 241, 0.1)",
+                                                                            border: "1px solid rgba(99, 102, 241, 0.2)",
+                                                                            display: "flex",
+                                                                            alignItems: "center",
+                                                                            justifyContent: "center",
+                                                                            color: "#818cf8",
+                                                                            fontSize: "18px",
+                                                                            flexShrink: 0,
+                                                                        },
+                                                                        userAvatar: {
+                                                                            width: "36px",
+                                                                            height: "36px",
+                                                                            borderRadius: "10px",
+                                                                            background: "rgba(168, 85, 247, 0.1)",
+                                                                            border: "1px solid rgba(168, 85, 247, 0.2)",
+                                                                            display: "flex",
+                                                                            alignItems: "center",
+                                                                            justifyContent: "center",
+                                                                            color: "#c084fc",
+                                                                            fontSize: "16px",
+                                                                            flexShrink: 0,
+                                                                        },
+                                                                        messageBubble: {
+                                                                            maxWidth: "80%",
+                                                                            padding: "16px 20px",
+                                                                            borderRadius: "18px",
+                                                                            fontSize: "15px",
+                                                                            lineHeight: "1.6",
+                                                                        },
+                                                                        botBubble: {
+                                                                            background: "rgba(30, 41, 59, 0.5)",
+                                                                            border: "1px solid rgba(255, 255, 255, 0.05)",
+                                                                            color: "#e2e8f0",
+                                                                            borderTopLeftRadius: "2px",
+                                                                        },
+                                                                        userBubble: {
+                                                                            background: "linear-gradient(135deg, #6366f1 0%, #4f46e5 100%)",
+                                                                            color: "#fff",
+                                                                            borderTopRightRadius: "2px",
+                                                                            boxShadow: "0 10px 15px -3px rgba(99, 102, 241, 0.2)",
+                                                                        },
+                                                                        messageSender: {
+                                                                            fontSize: "11px",
+                                                                            fontWeight: "600",
+                                                                            textTransform: "uppercase",
+                                                                            letterSpacing: "0.05em",
+                                                                            marginBottom: "6px",
+                                                                            opacity: "0.6",
+                                                                        },
+                                                                        messageText: {
+                                                                            whiteSpace: "pre-wrap",
+                                                                        },
+                                                                        deleteButton: {
+                                                                            position: "absolute",
+                                                                            top: "10px",
+                                                                            right: "10px",
+                                                                            background: "transparent",
+                                                                            border: "none",
+                                                                            color: "rgba(255, 255, 255, 0.3)",
+                                                                            cursor: "pointer",
+                                                                            padding: "5px",
+                                                                            borderRadius: "5px",
+                                                                            display: "flex",
+                                                                            alignItems: "center",
+                                                                            justifyContent: "center",
+                                                                            opacity: 0,
+                                                                            transition: "all 0.2s ease",
+                                                                        },
+                                                                        inputArea: {
+                                                                            padding: "25px 30px",
+                                                                            borderTop: "1px solid rgba(255, 255, 255, 0.08)",
+                                                                            display: "flex",
+                                                                            gap: "15px",
+                                                                        },
+                                                                        input: {
+                                                                            flex: 1,
+                                                                            background: "rgba(15, 23, 42, 0.6)",
+                                                                            border: "1px solid rgba(255, 255, 255, 0.1)",
+                                                                            borderRadius: "14px",
+                                                                            padding: "14px 20px",
+                                                                            color: "#fff",
+                                                                            fontSize: "15px",
+                                                                            outline: "none",
+                                                                            transition: "all 0.2s ease",
+                                                                        },
+                                                                        button: {
+                                                                            background: "linear-gradient(135deg, #6366f1 0%, #a855f7 100%)",
+                                                                            color: "#fff",
+                                                                            border: "none",
+                                                                            borderRadius: "14px",
+                                                                            padding: "0 25px",
+                                                                            fontSize: "15px",
+                                                                            fontWeight: "600",
+                                                                            cursor: "pointer",
+                                                                            transition: "all 0.2s ease",
+                                                                            boxShadow: "0 10px 15px -3px rgba(99, 102, 241, 0.2)",
+                                                                        },
+                                                                        markdownWrapper: {
+                                                                            overflowWrap: "anywhere",
+                                                                        },
+                                                                        paragraph: {
+                                                                            margin: "0 0 12px 0",
+                                                                        },
+                                                                        ul: {
+                                                                            margin: "0 0 12px 20px",
+                                                                            padding: 0,
+                                                                        },
+                                                                        ol: {
+                                                                            margin: "0 0 12px 20px",
+                                                                            padding: 0,
+                                                                        },
+                                                                        li: {
+                                                                            marginBottom: "6px",
+                                                                        },
+                                                                        inlineCode: {
+                                                                            background: "rgba(255, 255, 255, 0.1)",
+                                                                            padding: "2px 6px",
+                                                                            borderRadius: "4px",
+                                                                            fontSize: "0.9em",
+                                                                            fontFamily: "monospace",
+                                                                            color: "#818cf8",
+                                                                        },
+                                                                        codeBlockContainer: {
+                                                                            margin: "15px 0",
+                                                                            borderRadius: "12px",
+                                                                            overflow: "hidden",
+                                                                            border: "1px solid rgba(255, 255, 255, 0.1)",
+                                                                        },
+                                                                        codeHeader: {
+                                                                            background: "#1e1e2e",
+                                                                            padding: "8px 16px",
+                                                                            display: "flex",
+                                                                            justifyContent: "space-between",
+                                                                            alignItems: "center",
+                                                                            borderBottom: "1px solid rgba(255, 255, 255, 0.05)",
+                                                                        },
+                                                                        codeLang: {
+                                                                            fontSize: "12px",
+                                                                            color: "#94a3b8",
+                                                                            textTransform: "uppercase",
+                                                                            fontWeight: "600",
+                                                                        },
+                                                                        copyBtn: {
+                                                                            background: "transparent",
+                                                                            border: "none",
+                                                                            color: "#94a3b8",
+                                                                            display: "flex",
+                                                                            alignItems: "center",
+                                                                            gap: "6px",
+                                                                            fontSize: "11px",
+                                                                            cursor: "pointer",
+                                                                            padding: "4px 8px",
+                                                                            borderRadius: "4px",
+                                                                            transition: "all 0.2s ease",
+                                                                        },
+                                                                        syntaxContent: {
+                                                                            margin: 0,
+                                                                            padding: "20px",
+                                                                            fontSize: "14px",
+                                                                            lineHeight: "1.5",
+                                                                        },
+                                                                        tableWrapper: {
+                                                                            overflowX: "auto",
+                                                                            margin: "15px 0",
+                                                                            borderRadius: "10px",
+                                                                            border: "1px solid rgba(255, 255, 255, 0.1)",
+                                                                        },
+                                                                        table: {
+                                                                            width: "100%",
+                                                                            borderCollapse: "collapse",
+                                                                            fontSize: "14px",
+                                                                        },
+                                                                        th: {
+                                                                            background: "rgba(255, 255, 255, 0.05)",
+                                                                            padding: "12px 15px",
+                                                                            textAlign: "left",
+                                                                            borderBottom: "1px solid rgba(255, 255, 255, 0.1)",
+                                                                            color: "#94a3b8",
+                                                                        },
+                                                                        td: {
+                                                                            padding: "10px 15px",
+                                                                            borderBottom: "1px solid rgba(255, 255, 255, 0.05)",
+                                                                        },
+                                                                        blockquote: {
+                                                                            margin: "15px 0",
+                                                                            padding: "10px 20px",
+                                                                            borderLeft: "4px solid #6366f1",
+                                                                            background: "rgba(99, 102, 241, 0.05)",
+                                                                            borderRadius: "0 8px 8px 0",
+                                                                            color: "#cbd5e1",
+                                                                            fontStyle: "italic",
+                                                                        },
+                                                                        h1: {
+                                                                            fontSize: "22px",
+                                                                            margin: "20px 0 10px 0"
+                                                                        },
+                                                                        h2: {
+                                                                            fontSize: "18px",
+                                                                            margin: "18px 0 10px 0"
+                                                                        },
+                                                                        h3: {
+                                                                            fontSize: "16px",
+                                                                            margin: "16px 0 8px 0"
+                                                                        },
+                                                                        typing: {
+                                                                            display: "flex",
+                                                                            gap: "4px",
+                                                                            padding: "4px 0",
+                                                                        },
+                                                                        dot: {
+                                                                            width: "6px",
+                                                                            height: "6px",
+                                                                            background: "#94a3b8",
+                                                                            borderRadius: "50%",
+                                                                            animation: "blink 1.4s infinite both",
+                                                                        },
+                                                                        historyOverlay: {
+                                                                            position: "absolute",
+                                                                            top: 0,
+                                                                            left: 0,
+                                                                            width: "100%",
+                                                                            height: "100%",
+                                                                            background: "rgba(0, 0, 0, 0.4)",
+                                                                            zIndex: 50,
+                                                                            display: "flex",
+                                                                            justifyContent: "flex-end",
+                                                                        },
+                                                                        historyPanel: {
+                                                                            width: "350px",
+                                                                            height: "100%",
+                                                                            background: "#171923",
+                                                                            borderLeft: "1px solid rgba(255, 255, 255, 0.1)",
+                                                                            display: "flex",
+                                                                            flexDirection: "column",
+                                                                            animation: "slideIn 0.3s ease-out",
+                                                                        },
+                                                                        historyHeader: {
+                                                                            padding: "20px",
+                                                                            borderBottom: "1px solid rgba(255, 255, 255, 0.08)",
+                                                                            display: "flex",
+                                                                            justifyContent: "space-between",
+                                                                            alignItems: "center",
+                                                                        },
+                                                                        historyHeaderLeft: {
+                                                                            display: "flex",
+                                                                            alignItems: "center",
+                                                                            gap: "10px",
+                                                                            color: "#94a3b8",
+                                                                        },
+                                                                        historyTitle: {
+                                                                            fontSize: "16px",
+                                                                            fontWeight: "600",
+                                                                            margin: 0,
+                                                                        },
+                                                                        historyList: {
+                                                                            flex: 1,
+                                                                            overflowY: "auto",
+                                                                            padding: "15px",
+                                                                        },
+                                                                        emptyHistory: {
+                                                                            textAlign: "center",
+                                                                            color: "#4a5568",
+                                                                            marginTop: "40px",
+                                                                            fontSize: "14px",
+                                                                        },
+                                                                        historyItem: {
+                                                                            padding: "15px",
+                                                                            borderRadius: "12px",
+                                                                            background: "rgba(255, 255, 255, 0.03)",
+                                                                            border: "1px solid rgba(255, 255, 255, 0.05)",
+                                                                            marginBottom: "12px",
+                                                                            transition: "all 0.2s ease",
+                                                                            display: "flex",
+                                                                            flexDirection: "column",
+                                                                            gap: "10px",
+                                                                        },
+                                                                        historyContent: {
+                                                                            cursor: "pointer",
+                                                                        },
+                                                                        historyItemTitle: {
+                                                                            fontSize: "14px",
+                                                                            fontWeight: "600",
+                                                                            marginBottom: "5px",
+                                                                            color: "#e2e8f0",
+                                                                            whiteSpace: "nowrap",
+                                                                            overflow: "hidden",
+                                                                            textOverflow: "ellipsis",
+                                                                        },
+                                                                        historyItemMeta: {
+                                                                            fontSize: "11px",
+                                                                            color: "#718096",
+                                                                        },
+                                                                        historyItemActions: {
+                                                                            display: "flex",
+                                                                            justifyContent: "flex-end",
+                                                                            gap: "10px",
+                                                                            borderTop: "1px solid rgba(255, 255, 255, 0.05)",
+                                                                            paddingTop: "10px",
+                                                                        },
+                                                                        historyLoadBtn: {
+                                                                            fontSize: "12px",
+                                                                            padding: "4px 10px",
+                                                                            background: "rgba(99, 102, 241, 0.1)",
+                                                                            border: "1px solid rgba(99, 102, 241, 0.2)",
+                                                                            color: "#818cf8",
+                                                                            borderRadius: "6px",
+                                                                            cursor: "pointer",
+                                                                        },
+                                                                        historyDeleteBtn: {
+                                                                            background: "transparent",
+                                                                            border: "none",
+                                                                            color: "#e53e3e",
+                                                                            cursor: "pointer",
+                                                                            display: "flex",
+                                                                            alignItems: "center",
+                                                                            opacity: 0.6,
+                                                                        },
+                                                                        iconButton: {
+                                                                            background: "transparent",
+                                                                            border: "none",
+                                                                            color: "#94a3b8",
+                                                                            cursor: "pointer",
+                                                                        }
+                                                                    };
+
+                                                                    export default App;
