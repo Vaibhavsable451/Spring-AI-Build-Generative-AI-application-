@@ -6,8 +6,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class HomeController {
 
-    @GetMapping("/")
-    public String home() {
-        return "Welcome to Spring AI RAG Agent! The service is up and running.";
+
+        @GetMapping("/")
+        public String home(){
+            return "Spring AI Chatbot backend is running";
+        }
     }
-}
+
