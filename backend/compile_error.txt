@@ -1,0 +1,46 @@
+﻿[INFO] Scanning for projects...
+[INFO] 
+[INFO] ----------------< com.test.rag.db:Spring-AI-Rag-agent >-----------------
+[INFO] Building Spring AI Reag agent 0.0.1-SNAPSHOT
+[INFO]   from pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- clean:3.4.1:clean (default-clean) @ Spring-AI-Rag-agent ---
+[INFO] Deleting C:\Users\Vibhav\Pictures\SpringAi\backend\target
+[INFO] 
+[INFO] --- resources:3.3.1:resources (default-resources) @ Spring-AI-Rag-agent ---
+[INFO] Copying 1 resource from src\main\resources to target\classes
+[INFO] Copying 0 resource from src\main\resources to target\classes
+[INFO] 
+[INFO] --- compiler:3.13.0:compile (default-compile) @ Spring-AI-Rag-agent ---
+[INFO] Recompiling the module because of changed source code.
+[INFO] Compiling 5 source files with javac [debug parameters release 17] to target\classes
+[INFO] -------------------------------------------------------------
+[ERROR] COMPILATION ERROR : 
+[INFO] -------------------------------------------------------------
+[ERROR] /C:/Users/Vibhav/Pictures/SpringAi/backend/src/main/java/com/test/rag/db/springairagagent/config/WebConfig.java:[1,1] illegal character: '\ufeff'
+[ERROR] /C:/Users/Vibhav/Pictures/SpringAi/backend/src/main/java/com/test/rag/db/springairagagent/config/WebConfig.java:[1,10] class, interface, enum, or record expected
+[ERROR] /C:/Users/Vibhav/Pictures/SpringAi/backend/src/main/java/com/test/rag/db/springairagagent/config/WebConfig.java:[3,1] class, interface, enum, or record expected
+[ERROR] /C:/Users/Vibhav/Pictures/SpringAi/backend/src/main/java/com/test/rag/db/springairagagent/config/WebConfig.java:[4,1] class, interface, enum, or record expected
+[ERROR] /C:/Users/Vibhav/Pictures/SpringAi/backend/src/main/java/com/test/rag/db/springairagagent/config/WebConfig.java:[5,1] class, interface, enum, or record expected
+[INFO] 5 errors 
+[INFO] -------------------------------------------------------------
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD FAILURE
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  2.553 s
+[INFO] Finished at: 2026-03-12T10:24:18+05:30
+[INFO] ------------------------------------------------------------------------
+[ERROR] Failed to execute goal org.apache.maven.plugins:maven-compiler-plugin:3.13.0:compile (default-compile) on project Spring-AI-Rag-agent: Compilation failure: Compilation failure: 
+[ERROR] /C:/Users/Vibhav/Pictures/SpringAi/backend/src/main/java/com/test/rag/db/springairagagent/config/WebConfig.java:[1,1] illegal character: '\ufeff'
+[ERROR] /C:/Users/Vibhav/Pictures/SpringAi/backend/src/main/java/com/test/rag/db/springairagagent/config/WebConfig.java:[1,10] class, interface, enum, or record expected
+[ERROR] /C:/Users/Vibhav/Pictures/SpringAi/backend/src/main/java/com/test/rag/db/springairagagent/config/WebConfig.java:[3,1] class, interface, enum, or record expected
+[ERROR] /C:/Users/Vibhav/Pictures/SpringAi/backend/src/main/java/com/test/rag/db/springairagagent/config/WebConfig.java:[4,1] class, interface, enum, or record expected
+[ERROR] /C:/Users/Vibhav/Pictures/SpringAi/backend/src/main/java/com/test/rag/db/springairagagent/config/WebConfig.java:[5,1] class, interface, enum, or record expected
+[ERROR] -> [Help 1]
+[ERROR] 
+[ERROR] To see the full stack trace of the errors, re-run Maven with the -e switch.
+[ERROR] Re-run Maven using the -X switch to enable full debug logging.
+[ERROR] 
+[ERROR] For more information about the errors and possible solutions, please read the following articles:
+[ERROR] [Help 1] http://cwiki.apache.org/confluence/display/MAVEN/MojoFailureException
