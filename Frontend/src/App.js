@@ -96,7 +96,7 @@ function App() {
         setLoading(true);
 
         try {
-            const baseUrl = (process.env.REACT_APP_API_URL || "http://localhost:8080").replace(/\/$/, "");
+            const baseUrl = (process.env.REACT_APP_API_URL || "http://localhost:8080").replace(/\/+$/, "");
             const response = await axios.get(`${baseUrl}/user/chat`, {
                 params: {
                     question
@@ -178,8 +178,8 @@ function App() {
                 /> <
                 h3 style = {
                     styles.historyTitle
-                } > Chat History < /h3> <
-                /div> <
+                } > Chat History < /h3> < /
+                div > <
                 button onClick = {
                     () => setShowHistory(false)
                 }
@@ -190,8 +190,8 @@ function App() {
                 FiX size = {
                     18
                 }
-                /> <
-                /button> <
+                /> < /
+                button > <
                 /div> <
                 div style = {
                     styles.historyList
@@ -229,8 +229,8 @@ function App() {
                                 item.messages.length
                             }
                             messages <
-                            /div> <
-                            /div> <
+                            /div> < /
+                            div > <
                             div style = {
                                 styles.historyItemActions
                             } >
@@ -251,15 +251,15 @@ function App() {
                             FiTrash2 size = {
                                 14
                             }
-                            /> <
-                            /button> <
-                            /div> <
-                            /div>
+                            /> < /
+                            button > <
+                            /div> < /
+                            div >
                         ))
                     )
                 } <
-                /div> <
-                /div> <
+                /div> < /
+                div > <
                 /div>
             )
         }
@@ -280,8 +280,8 @@ function App() {
         RiRobot3Fill style = {
             styles.logoIcon
         }
-        /> <
-        /div> <
+        /> < /
+        div > <
         div style = {
             styles.headerText
         } >
@@ -291,8 +291,8 @@ function App() {
         } > Kairo AI Chat < /h1> <
         p style = {
             styles.subtitle
-        } > Smart assistant• Markdown + Code Support < /p> <
-        /div> <
+        } > Smart assistant• Markdown + Code Support < /p> < /
+        div > <
         div style = {
             styles.headerActions
         } >
@@ -308,8 +308,8 @@ function App() {
         FiClock size = {
             18
         }
-        /> <
-        /button> <
+        /> < /
+        button > <
         button onClick = {
             clearChat
         }
@@ -321,161 +321,161 @@ function App() {
         FiTrash2 size = {
             18
         }
-        /> <
-        /button> <
-        /div> <
-        /div>
+        /> < /
+        button > <
+        /div> < /
+        div >
 
         <
         div style = {
             styles.chatBox
         } > {
             messages.map((msg, idx) => {
-                const isUser = msg.from === userName;
-                return ( <
-                    div key = {
-                        idx
-                    }
-                    style = {
-                        {
-                            ...styles.messageRow,
-                            justifyContent: isUser ? "flex-end" : "flex-start"
-                        }
-                    } > {
-                        !isUser && ( <
+                    const isUser = msg.from === userName;
+                    return ( <
+                            div key = {
+                                idx
+                            }
+                            style = {
+                                {
+                                    ...styles.messageRow,
+                                    justifyContent: isUser ? "flex-end" : "flex-start"
+                                }
+                            } > {
+                                !isUser && ( <
+                                    div style = {
+                                        styles.botAvatar
+                                    } >
+                                    <
+                                    TbRobot / >
+                                    <
+                                    /div>
+                                )
+                            } <
                             div style = {
-                                styles.botAvatar
+                                {
+                                    ...styles.messageBubble,
+                                    ...(isUser ? styles.userBubble : styles.botBubble),
+                                    position: "relative",
+                                    paddingRight: "46px"
+                                }
                             } >
                             <
-                            TbRobot / >
-                            <
-                            /div>
-                        )
-                    } <
-                    div style = {
-                        {
-                            ...styles.messageBubble,
-                            ...(isUser ? styles.userBubble : styles.botBubble),
-                            position: "relative",
-                            paddingRight: "46px"
-                        }
-                    } >
-                    <
-                    div style = {
-                        styles.messageSender
-                    } > {
-                        msg.from
-                    } < /div> {
-                        isUser ? ( <
                             div style = {
-                                styles.messageText
+                                styles.messageSender
                             } > {
-                                msg.text
-                            } < /div>
-                        ) : ( <
-                            MarkdownMessage content = {
-                                msg.text
-                            }
-                            />
-                        )
-                    } <
-                    button onClick = {
-                        () => deleteMessage(idx)
-                    }
+                                msg.from
+                            } < /div> {
+                            isUser ? ( <
+                                div style = {
+                                    styles.messageText
+                                } > {
+                                    msg.text
+                                } < /div>
+                            ) : ( <
+                                MarkdownMessage content = {
+                                    msg.text
+                                }
+                                />
+                            )
+                        } <
+                        button onClick = {
+                            () => deleteMessage(idx)
+                        }
                     style = {
                         styles.deleteButton
                     }
                     title = "Delete message" >
-                    <
-                    FiTrash2 size = {
-                        14
-                    }
-                    /> <
-                    /button> <
-                    /div> {
-                        isUser && ( <
-                            div style = {
-                                styles.userAvatar
-                            } >
-                            <
-                            FaUser / >
-                            <
-                            /div>
-                        )
-                    } <
-                    /div>
-                );
-            })
-        } {
-            loading && ( <
-                div style = {
-                    {
-                        ...styles.messageRow,
-                        justifyContent: "flex-start"
-                    }
-                } >
-                <
-                div style = {
-                    styles.botAvatar
-                } >
-                <
-                TbRobot / >
-                <
-                /div> <
-                div style = {
-                    {
-                        ...styles.messageBubble,
-                        ...styles.botBubble
-                    }
-                } >
-                <
-                div style = {
-                    styles.messageSender
-                } > Kairo < /div> <
-                TypingDots / >
-                <
-                /div> <
+                        <
+                        FiTrash2 size = {
+                            14
+                        }
+                    /> < /
+                    button > <
+                        /div> {
+                    isUser && ( <
+                        div style = {
+                            styles.userAvatar
+                        } >
+                        <
+                        FaUser / >
+                        <
+                        /div>
+                    )
+                } <
                 /div>
-            )
-        } <
-        div ref = {
-            chatEndRef
-        }
-        /> <
-        /div>
-
+            );
+        })
+} {
+    loading && ( <
+        div style = {
+            {
+                ...styles.messageRow,
+                justifyContent: "flex-start"
+            }
+        } >
         <
         div style = {
-            styles.inputArea
+            styles.botAvatar
         } >
         <
-        input style = {
-            styles.input
-        }
-        type = "text"
-        placeholder = "Ask anything..."
-        value = {
-            input
-        }
-        onChange = {
-            (e) => setInput(e.target.value)
-        }
-        onKeyDown = {
-            (e) => e.key === "Enter" && sendMessage()
-        }
-        /> <
-        button style = {
-            styles.button
-        }
-        onClick = {
-            sendMessage
+        TbRobot / >
+        <
+        /div> <
+        div style = {
+            {
+                ...styles.messageBubble,
+                ...styles.botBubble
+            }
         } >
-        Send <
-        /button> <
-        /div> <
-        /div> <
-        /div>
-    );
+        <
+        div style = {
+            styles.messageSender
+        } > Kairo < /div> <
+        TypingDots / >
+        <
+        /div> < /
+        div >
+    )
+} <
+div ref = {
+    chatEndRef
+}
+/> < /
+div >
+
+    <
+    div style = {
+        styles.inputArea
+    } >
+    <
+    input style = {
+        styles.input
+    }
+type = "text"
+placeholder = "Ask anything..."
+value = {
+    input
+}
+onChange = {
+    (e) => setInput(e.target.value)
+}
+onKeyDown = {
+    (e) => e.key === "Enter" && sendMessage()
+}
+/> <
+button style = {
+    styles.button
+}
+onClick = {
+        sendMessage
+    } >
+    Send <
+    /button> < /
+    div > <
+    /div> < /
+    div >
+);
 }
 
 function MarkdownMessage({
@@ -564,8 +564,8 @@ function MarkdownMessage({
                                                                     styles.table
                                                                 } > {
                                                                     children
-                                                                } < /table> <
-                                                                /div>
+                                                                } < /table> < /
+                                                                div >
                                                             );
                                                         },
                                                         th({
@@ -617,12 +617,11 @@ function MarkdownMessage({
                                                                                             children
                                                                                         } < /h3>; },
                                                                                     }
-                                                                                } >
-                                                                                {
+                                                                                } > {
                                                                                     content
                                                                                 } <
-                                                                                /ReactMarkdown> <
-                                                                                /div>
+                                                                                /ReactMarkdown> < /
+                                                                                div >
                                                                         );
                                                                     }
 
@@ -666,10 +665,10 @@ function MarkdownMessage({
                                                                             } <
                                                                             span > {
                                                                                 copied ? "Copied" : "Copy"
-                                                                            } < /span> <
-                                                                            /button> <
-                                                                            /CopyToClipboard> <
-                                                                            /div> <
+                                                                            } < /span> < /
+                                                                            button > <
+                                                                            /CopyToClipboard> < /
+                                                                            div > <
                                                                             SyntaxHighlighter language = {
                                                                                 language
                                                                             }
@@ -678,12 +677,11 @@ function MarkdownMessage({
                                                                             }
                                                                             customStyle = {
                                                                                 styles.syntaxContent
-                                                                            } >
-                                                                            {
+                                                                            } > {
                                                                                 code
                                                                             } <
-                                                                            /SyntaxHighlighter> <
-                                                                            /div>
+                                                                            /SyntaxHighlighter> < /
+                                                                            div >
                                                                         );
                                                                     }
 
@@ -701,8 +699,8 @@ function MarkdownMessage({
                                                                             } > < /span> <
                                                                             span style = {
                                                                                 styles.dot
-                                                                            } > < /span> <
-                                                                            /div>
+                                                                            } > < /span> < /
+                                                                            div >
                                                                         );
                                                                     }
 
