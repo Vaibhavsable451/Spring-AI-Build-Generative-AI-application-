@@ -1,0 +1,4 @@
+﻿
+> chatbot@0.1.0 build
+> CI=false react-scripts build
+

@@ -15,7 +15,7 @@ public class ChatController {
           this.chatService = chatService;
       }
 
-      @CrossOrigin(origins = "http://localhost:3000")
+      @CrossOrigin(origins = "*")
       @GetMapping(value = "/user/chat", produces = "application/json")
       public String chat(@RequestParam String question){
           return chatService.getMyResponse(question);
