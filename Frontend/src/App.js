@@ -101,7 +101,9 @@ function App() {
                 "https://spring-ai-build-generative-ai.onrender.com"
             ).replace(/\/+$/, "");
 
-            const response = await axios.get(`${baseUrl}/user/chat`, {
+            const fullUrl = `${baseUrl}/user/chat`;
+            console.log("Calling API:", fullUrl);
+            const response = await axios.get(fullUrl, {
                 params: {
                     question
                 },
