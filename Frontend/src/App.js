@@ -86,40 +86,36 @@ function App() {
         if (!question.trim()) return;
 
         if (showUserMessage) {
-            const userMessage = {
-                from: userName,
-                text: question,
-            };
+            const userMessage = { from: userName, text: question };
             setMessages((prev) => [...prev, userMessage]);
         }
 
         setLoading(true);
 
         try {
+            console.log("Requesting:", question);
             const response = await axios.get("https://spring-ai-build-generative-ai.onrender.com/user/chat", {
-                params: {
-                    question
-                },
-                headers: {
-                    Accept: "application/json",
-                },
+                params: { question },
+                headers: { 'Accept': 'text/plain' }
             });
 
-            const samReply = {
+            console.log("Response status:", response.status);
+            console.log("Response data type:", typeof response.data);
+
+            const replyText = typeof response.data === 'string' ? response.data : JSON.stringify(response.data);
+
+            const botReply = {
                 from: "Kairo",
-                text: typeof response.data === "string" ?
-                    response.data :
-                    JSON.stringify(response.data, null, 2),
+                text: replyText.trim() || "No response received."
             };
 
-            setMessages((prev) => [...prev, samReply]);
+            setMessages((prev) => [...prev, botReply]);
         } catch (error) {
+            console.error("API error:", error);
+            const errorMsg = error.response ? `Error ${error.response.status}: ${error.response.statusText}` : "Network error - check your connection.";
             setMessages((prev) => [
                 ...prev,
-                {
-                    from: "Kairo",
-                    text: "Oops! Something went wrong while connecting to the server.",
-                },
+                { from: "Kairo", text: "Oops! " + errorMsg }
             ]);
         } finally {
             setLoading(false);
@@ -644,14 +640,13 @@ const styles = {
         height: "100vh",
         width: "100vw",
         display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
+        flexDirection: "column",
         background: "radial-gradient(circle at top left, #12254a 0%, #0f172a 30%, #111827 65%, #1e1b4b 100%)",
         fontFamily: "'Inter', 'Segoe UI', sans-serif",
-        position: "fixed",
-        top: 0,
-        left: 0,
+        margin: 0,
+        padding: 0,
         overflow: "hidden",
+        position: "relative",
     },
 
     backgroundGlow1: {
@@ -688,29 +683,26 @@ const styles = {
     },
 
     container: {
-        width: "96vw",
-        height: "94vh",
-        maxWidth: "1500px",
+        width: "100%",
+        height: "100%",
         display: "flex",
         flexDirection: "column",
-        background: "rgba(255,255,255,0.08)",
-        backdropFilter: "blur(18px)",
-        WebkitBackdropFilter: "blur(18px)",
-        border: "1px solid rgba(255,255,255,0.12)",
-        borderRadius: "28px",
-        boxShadow: "0 25px 80px rgba(0,0,0,0.35)",
-        padding: "24px",
+        background: "rgba(10, 11, 20, 0.4)",
+        backdropFilter: "blur(20px)",
+        WebkitBackdropFilter: "blur(20px)",
         position: "relative",
         zIndex: 2,
+        padding: 0,
+        margin: 0,
     },
 
     header: {
         display: "flex",
         alignItems: "center",
         gap: "16px",
-        marginBottom: "18px",
-        paddingBottom: "16px",
-        borderBottom: "1px solid rgba(255,255,255,0.10)",
+        padding: "15px 30px",
+        background: "rgba(0, 0, 0, 0.2)",
+        borderBottom: "1px solid rgba(255, 255, 255, 0.1)",
         flexShrink: 0,
     },
 
@@ -1008,10 +1000,12 @@ const styles = {
     },
 
     inputArea: {
-        marginTop: "18px",
+        padding: "20px 30px",
         display: "flex",
-        gap: "14px",
+        gap: "15px",
         alignItems: "center",
+        background: "rgba(0, 0, 0, 0.2)",
+        borderTop: "1px solid rgba(255, 255, 255, 0.1)",
         flexShrink: 0,
     },
 
