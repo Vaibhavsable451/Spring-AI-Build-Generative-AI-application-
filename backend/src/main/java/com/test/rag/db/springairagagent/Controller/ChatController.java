@@ -30,8 +30,4 @@ public class ChatController {
         }
     }
 
-    @GetMapping("/")
-    public String home() {
-        return "Spring AI Chatbot backend is running";
-    }
 }
