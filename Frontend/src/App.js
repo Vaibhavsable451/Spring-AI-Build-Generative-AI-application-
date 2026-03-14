@@ -35,10 +35,7 @@ import {
 function App() {
     const userName = "Vaibhav";
     const [input, setInput] = useState("");
-    const [messages, setMessages] = useState([{
-        from: "Kairo",
-        text: "Hi **Vaibhav** 👋\n\nI\'m **Kairo AI Chat**.\nAsk me anything — I support normal text, markdown, and code responses.",
-    }]);
+    const [messages, setMessages] = useState([]);
     const [loading, setLoading] = useState(false);
     const [history, setHistory] = useState([]);
     const [showHistory, setShowHistory] = useState(false);
@@ -72,10 +69,8 @@ function App() {
                 ...prev,
             ]);
         }
-        setMessages([{
-            from: "Kairo",
-            text: "Hi again 👋\n\nNew chat started. Ask me anything.",
-        }]);
+        setMessages([]);
+        hasAskedOnce.current = false;
     };
 
     const loadHistory = (historyItem) => {
@@ -101,35 +96,24 @@ function App() {
         setLoading(true);
 
         try {
-            const baseUrl = (
-                process.env.REACT_APP_API_URL ||
-                "https://spring-ai-build-generative-ai.onrender.com"
-            ).replace(/\/+$/, "");
-
-            const fullUrl = `${baseUrl}/user/chat`;
-            console.log("Calling API:", fullUrl);
-            const response = await axios.get(fullUrl, {
+            const response = await axios.get("https://spring-ai-build-generative-ai.onrender.com/user/chat", {
                 params: {
                     question
                 },
                 headers: {
-                    Accept: "text/plain",
+                    Accept: "application/json",
                 },
             });
 
-            const replyText =
-                typeof response.data === "string" ?
-                response.data.trim() :
-                JSON.stringify(response.data, null, 2);
-
             const samReply = {
                 from: "Kairo",
-                text: replyText || "No response returned from server.",
+                text: typeof response.data === "string" ?
+                    response.data :
+                    JSON.stringify(response.data, null, 2),
             };
 
             setMessages((prev) => [...prev, samReply]);
         } catch (error) {
-            console.error("API error:", error);
             setMessages((prev) => [
                 ...prev,
                 {
@@ -142,7 +126,12 @@ function App() {
         }
     };
 
-    
+    useEffect(() => {
+        if (!hasAskedOnce.current) {
+            askQuestion("Who are you?", false);
+            hasAskedOnce.current = true;
+        }
+    }, []);
 
     const sendMessage = () => {
         if (!input.trim()) return;
@@ -155,11 +144,11 @@ function App() {
         } >
         <div style = {
             styles.backgroundGlow1
-        } > </div> <div style = {
+        } ></div> <div style = {
             styles.backgroundGlow2
-        } > </div> <div style = {
+        } ></div> <div style = {
             styles.backgroundGlow3
-        } > </div>
+        } ></div>
 
         {
             showHistory && ( <div style = {
@@ -179,7 +168,9 @@ function App() {
                 }
                 /> <h3 style = {
                     styles.historyTitle
-                } > Chat History </h3> </div> <button onClick = {
+                } > Chat History</h3></div>
+
+                <button onClick = {
                     () => setShowHistory(false)
                 }
                 style = {
@@ -188,14 +179,14 @@ function App() {
                 <FiX size = {
                     18
                 }
-                /> </button> </div>
+                /></button></div>
 
                 <div style = {
                     styles.historyList
                 } > {
                     history.length === 0 ? ( <div style = {
                             styles.emptyHistory
-                        } > No history yet </div>
+                        } > No history yet</div>
                     ) : (
                         history.map((item) => ( <div key = {
                                 item.id
@@ -213,14 +204,14 @@ function App() {
                                 styles.historyItemTitle
                             } > {
                                 item.title
-                            } </div> <div style = {
+                            }</div> <div style = {
                                 styles.historyItemMeta
                             } > {
                                 item.timestamp
                             }• {
                                 item.messages.length
                             }
-                            messages </div> </div>
+                            messages</div></div>
 
                             <div style = {
                                 styles.historyItemActions
@@ -231,7 +222,7 @@ function App() {
                             style = {
                                 styles.historyLoadBtn
                             } >
-                            Load </button> <button onClick = {
+                            Load</button> <button onClick = {
                                 () => deleteHistory(item.id)
                             }
                             style = {
@@ -240,10 +231,10 @@ function App() {
                             <FiTrash2 size = {
                                 14
                             }
-                            /> </button> </div> </div>
+                            /></button></div></div>
                         ))
                     )
-                } </div> </div> </div>
+                }</div></div></div>
             )
         }
 
@@ -259,16 +250,17 @@ function App() {
         <RiRobot3Fill style = {
             styles.logoIcon
         }
-        /> </div>
+        /></div>
 
         <div style = {
             styles.headerText
         } >
         <h1 style = {
             styles.title
-        } > Kairo AI Chat </h1> <p style = {
+        } > Kairo AI Chat</h1> <p style = {
             styles.subtitle
-        } > Smart assistant• Markdown + Code Support </p> </div>
+        } >
+        Smart assistant• Markdown + Code Support</p></div>
 
         <div style = {
             styles.headerActions
@@ -283,7 +275,7 @@ function App() {
         <FiClock size = {
             18
         }
-        /> </button>
+        /></button>
 
         <button onClick = {
             clearChat
@@ -295,7 +287,7 @@ function App() {
         <FiTrash2 size = {
             18
         }
-        /> </button> </div> </div>
+        /></button></div></div>
 
         <div style = {
             styles.chatBox
@@ -303,18 +295,20 @@ function App() {
             messages.map((msg, idx) => {
                 const isUser = msg.from === userName;
 
-                return ( <div key = {idx}
+                return ( <div key = {
+                        idx
+                    }
                     style = {
                         {
                             ...styles.messageRow,
-                            justifyContent: isUser ? "flex-end" : "flex-start"
+                            justifyContent: isUser ? "flex-end" : "flex-start",
                         }
-                    } > {
+                    } >
+                    {
                         !isUser && ( <div style = {
                                 styles.botAvatar
                             } >
-                            <TbRobot / >
-                            </div>
+                            <TbRobot / ></div>
                         )
                     }
 
@@ -323,21 +317,21 @@ function App() {
                             ...styles.messageBubble,
                             ...(isUser ? styles.userBubble : styles.botBubble),
                             position: "relative",
-                            paddingRight: "46px"
+                            paddingRight: "46px",
                         }
                     } >
                     <div style = {
                         styles.messageSender
                     } > {
                         msg.from
-                    } </div>
+                    }</div>
 
                     {
                         isUser ? ( <div style = {
                                 styles.messageText
                             } > {
                                 msg.text
-                            } </div>
+                            }</div>
                         ) : ( <MarkdownMessage content = {
                                 msg.text
                             }
@@ -355,16 +349,15 @@ function App() {
                     <FiTrash2 size = {
                         14
                     }
-                    /> </button> </div>
+                    /></button></div>
 
                     {
                         isUser && ( <div style = {
                                 styles.userAvatar
                             } >
-                            <FaUser / >
-                            </div>
+                            <FaUser / ></div>
                         )
-                    } </div>
+                    }</div>
                 );
             })
         }
@@ -379,8 +372,7 @@ function App() {
                 <div style = {
                     styles.botAvatar
                 } >
-                <TbRobot / >
-                </div> <div style = {
+                <TbRobot / ></div> <div style = {
                     {
                         ...styles.messageBubble,
                         ...styles.botBubble
@@ -388,15 +380,14 @@ function App() {
                 } >
                 <div style = {
                     styles.messageSender
-                } > Kairo </div> <TypingDots / >
-                </div> </div>
+                } > Kairo</div> <TypingDots / ></div></div>
             )
         }
 
         <div ref = {
             chatEndRef
         }
-        /> </div>
+        /></div>
 
         <div style = {
             styles.inputArea
@@ -421,7 +412,7 @@ function App() {
         onClick = {
             sendMessage
         } >
-        Send </button> </div> </div> </div>
+        Send</button></div></div></div>
     );
 }
 
@@ -462,7 +453,7 @@ function MarkdownMessage({
                                 ...props
                             } > {
                                 children
-                            } </code>
+                            }</code>
                         );
                     },
                     p({
@@ -472,7 +463,7 @@ function MarkdownMessage({
                             styles.paragraph
                         } > {
                             children
-                        } </p>;
+                        }</p>;
                     },
                     ul({
                         children
@@ -481,7 +472,7 @@ function MarkdownMessage({
                             styles.ul
                         } > {
                             children
-                        } </ul>;
+                        }</ul>;
                     },
                     ol({
                         children
@@ -490,7 +481,7 @@ function MarkdownMessage({
                             styles.ol
                         } > {
                             children
-                        } </ol>;
+                        }</ol>;
                     },
                     li({
                         children
@@ -499,7 +490,7 @@ function MarkdownMessage({
                             styles.li
                         } > {
                             children
-                        } </li>;
+                        }</li>;
                     },
                     table({
                         children
@@ -511,7 +502,7 @@ function MarkdownMessage({
                                 styles.table
                             } > {
                                 children
-                            } </table> </div>
+                            }</table></div>
                         );
                     },
                     th({
@@ -521,7 +512,7 @@ function MarkdownMessage({
                             styles.th
                         } > {
                             children
-                        } </th>;
+                        }</th>;
                     },
                     td({
                         children
@@ -530,7 +521,7 @@ function MarkdownMessage({
                             styles.td
                         } > {
                             children
-                        } </td>;
+                        }</td>;
                     },
                     blockquote({
                         children
@@ -539,7 +530,7 @@ function MarkdownMessage({
                             styles.blockquote
                         } > {
                             children
-                        } </blockquote>;
+                        }</blockquote>;
                     },
                     h1({
                         children
@@ -548,7 +539,7 @@ function MarkdownMessage({
                             styles.h1
                         } > {
                             children
-                        } </h1>;
+                        }</h1>;
                     },
                     h2({
                         children
@@ -557,7 +548,7 @@ function MarkdownMessage({
                             styles.h2
                         } > {
                             children
-                        } </h2>;
+                        }</h2>;
                     },
                     h3({
                         children
@@ -566,13 +557,13 @@ function MarkdownMessage({
                             styles.h3
                         } > {
                             children
-                        } </h3>;
+                        }</h3>;
                     },
             }
         } >
         {
             content
-        } </ReactMarkdown> </div>
+        }</ReactMarkdown></div>
     );
 }
 
@@ -584,35 +575,37 @@ function CodeBlock({
 
     const handleCopy = () => {
         setCopied(true);
-        setTimeout(() => setCopied(false), 2000);
+        setTimeout(() => setCopied(false), 1500);
     };
 
     return ( <div style = {
-            styles.codeBlockContainer
+            styles.codeBlockWrapper
         } >
         <div style = {
             styles.codeHeader
         } >
         <span style = {
-            styles.codeLang
+            styles.codeLanguage
         } > {
-            language
-        } </span> <CopyToClipboard text = {
+            language && language !== "text" ? language : "code"
+        }</span>
+
+        <CopyToClipboard text = {
             code
         }
         onCopy = {
             handleCopy
         } >
         <button style = {
-            styles.copyBtn
+            styles.copyButton
         } > {
             copied ? <FiCheck size = {
-                14
+                16
             }
-            /> : <FiCopy size={14} / >
+            /> : <FiCopy size={16} / >
         } <span > {
             copied ? "Copied" : "Copy"
-        } </span> </button> </CopyToClipboard> </div>
+        }</span></button></CopyToClipboard></div>
 
         <SyntaxHighlighter language = {
             language
@@ -621,466 +614,560 @@ function CodeBlock({
             vscDarkPlus
         }
         customStyle = {
-            styles.syntaxContent
-        } > {
+            styles.syntaxHighlighter
+        }
+        wrapLongLines = {
+            true
+        } >
+        {
             code
-        } </SyntaxHighlighter> </div>
+        }</SyntaxHighlighter></div>
     );
 }
 
 function TypingDots() {
     return ( <div style = {
-            styles.typing
+            styles.typingDots
         } >
         <span style = {
             styles.dot
-        } > </span> <span style = {
+        } ></span> <span style = {
             styles.dot
-        } > </span> <span style = {
+        } ></span> <span style = {
             styles.dot
-        } > </span> </div>
+        } ></span></div>
     );
 }
 
 const styles = {
     page: {
-        width: "100vw",
         height: "100vh",
-        background: "#0a0b10",
+        width: "100vw",
         display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        background: "radial-gradient(circle at top left, #12254a 0%, #0f172a 30%, #111827 65%, #1e1b4b 100%)",
+        fontFamily: "'Inter', 'Segoe UI', sans-serif",
+        position: "fixed",
+        top: 0,
+        left: 0,
         overflow: "hidden",
-        position: "relative",
-        margin: 0,
-        padding: 0,
-        fontFamily: "'Inter', sans-serif",
-        color: "#fff",
     },
+
     backgroundGlow1: {
         position: "absolute",
-        width: "500px",
-        height: "500px",
-        background: "radial-gradient(circle, rgba(99, 102, 241, 0.15) 0%, transparent 70%)",
-        top: "-100px",
-        right: "-100px",
+        width: "420px",
+        height: "420px",
+        borderRadius: "50%",
+        background: "rgba(59,130,246,0.18)",
+        top: "5%",
+        left: "5%",
+        filter: "blur(100px)",
     },
+
     backgroundGlow2: {
         position: "absolute",
-        width: "600px",
-        height: "600px",
-        background: "radial-gradient(circle, rgba(168, 85, 247, 0.1) 0%, transparent 70%)",
-        bottom: "-150px",
-        left: "-150px",
+        width: "380px",
+        height: "380px",
+        borderRadius: "50%",
+        background: "rgba(168,85,247,0.16)",
+        bottom: "8%",
+        right: "8%",
+        filter: "blur(100px)",
     },
+
     backgroundGlow3: {
         position: "absolute",
-        width: "400px",
-        height: "400px",
-        background: "radial-gradient(circle, rgba(59, 130, 246, 0.08) 0%, transparent 70%)",
-        top: "40%",
-        left: "20%",
+        width: "260px",
+        height: "260px",
+        borderRadius: "50%",
+        background: "rgba(14,165,233,0.12)",
+        bottom: "20%",
+        left: "30%",
+        filter: "blur(90px)",
     },
+
     container: {
-        width: "100%",
-        height: "100vh",
-        background: "rgba(10, 11, 16, 0.7)",
-        backdropFilter: "blur(30px)",
+        width: "96vw",
+        height: "94vh",
+        maxWidth: "1500px",
         display: "flex",
         flexDirection: "column",
-        zIndex: 10,
-        margin: 0,
-        padding: 0,
+        background: "rgba(255,255,255,0.08)",
+        backdropFilter: "blur(18px)",
+        WebkitBackdropFilter: "blur(18px)",
+        border: "1px solid rgba(255,255,255,0.12)",
+        borderRadius: "28px",
+        boxShadow: "0 25px 80px rgba(0,0,0,0.35)",
+        padding: "24px",
+        position: "relative",
+        zIndex: 2,
     },
+
     header: {
-        padding: "15px 30px",
-        background: "rgba(0, 0, 0, 0.2)",
-        borderBottom: "1px solid rgba(255, 255, 255, 0.05)",
         display: "flex",
         alignItems: "center",
-        gap: "15px",
+        gap: "16px",
+        marginBottom: "18px",
+        paddingBottom: "16px",
+        borderBottom: "1px solid rgba(255,255,255,0.10)",
+        flexShrink: 0,
     },
+
     logoBox: {
-        width: "45px",
-        height: "45px",
-        background: "linear-gradient(135deg, #6366f1 0%, #a855f7 100%)",
-        borderRadius: "12px",
+        width: "64px",
+        height: "64px",
+        borderRadius: "20px",
+        background: "linear-gradient(135deg, #3b82f6, #8b5cf6)",
         display: "flex",
-        alignItems: "center",
         justifyContent: "center",
-        boxShadow: "0 8px 16px rgba(99, 102, 241, 0.3)",
+        alignItems: "center",
+        boxShadow: "0 10px 30px rgba(59,130,246,0.35)",
+        flexShrink: 0,
     },
+
     logoIcon: {
-        fontSize: "24px",
+        fontSize: "32px",
         color: "#fff",
     },
+
     headerText: {
-        flex: 1,
+        minWidth: 0,
     },
-    title: {
-        fontSize: "20px",
-        fontWeight: "700",
-        margin: 0,
-        background: "linear-gradient(to right, #fff, #cbd5e1)",
-        WebkitBackgroundClip: "text",
-        WebkitTextFillColor: "transparent",
-    },
-    subtitle: {
-        fontSize: "12px",
-        color: "#94a3b8",
-        margin: "2px 0 0 0",
-    },
+
     headerActions: {
-        display: "flex",
-        gap: "10px",
-    },
-    headerIconBtn: {
-        background: "rgba(255, 255, 255, 0.05)",
-        border: "1px solid rgba(255, 255, 255, 0.1)",
-        color: "#94a3b8",
-        width: "38px",
-        height: "38px",
-        borderRadius: "10px",
+        marginLeft: "auto",
         display: "flex",
         alignItems: "center",
-        justifyContent: "center",
-        cursor: "pointer",
-        transition: "all 0.2s ease",
+        gap: "10px",
     },
+
+    headerIconBtn: {
+        width: "42px",
+        height: "42px",
+        borderRadius: "12px",
+        border: "1px solid rgba(255,255,255,0.12)",
+        background: "rgba(255,255,255,0.08)",
+        color: "#fff",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        cursor: "pointer",
+    },
+
+    title: {
+        margin: 0,
+        color: "#ffffff",
+        fontSize: "clamp(28px, 3vw, 42px)",
+        fontWeight: "800",
+        letterSpacing: "0.3px",
+    },
+
+    subtitle: {
+        margin: "4px 0 0 0",
+        color: "rgba(255,255,255,0.72)",
+        fontSize: "15px",
+    },
+
     chatBox: {
         flex: 1,
         overflowY: "auto",
-        padding: "30px",
-        display: "flex",
-        flexDirection: "column",
-        gap: "24px",
-        scrollBehavior: "smooth",
+        padding: "20px",
+        borderRadius: "22px",
+        background: "rgba(255,255,255,0.04)",
+        border: "1px solid rgba(255,255,255,0.08)",
+        minHeight: 0,
     },
+
     messageRow: {
         display: "flex",
+        alignItems: "flex-end",
         gap: "12px",
-        width: "100%",
+        marginBottom: "18px",
     },
+
     botAvatar: {
-        width: "36px",
-        height: "36px",
-        borderRadius: "10px",
-        background: "rgba(99, 102, 241, 0.1)",
-        border: "1px solid rgba(99, 102, 241, 0.2)",
+        width: "42px",
+        height: "42px",
+        borderRadius: "50%",
+        background: "linear-gradient(135deg, #2563eb, #7c3aed)",
+        color: "#fff",
         display: "flex",
-        alignItems: "center",
         justifyContent: "center",
-        color: "#818cf8",
+        alignItems: "center",
+        fontSize: "20px",
+        flexShrink: 0,
+        boxShadow: "0 8px 18px rgba(37,99,235,0.35)",
+    },
+
+    userAvatar: {
+        width: "42px",
+        height: "42px",
+        borderRadius: "50%",
+        background: "linear-gradient(135deg, #22c55e, #14b8a6)",
+        color: "#fff",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
         fontSize: "18px",
         flexShrink: 0,
+        boxShadow: "0 8px 18px rgba(34,197,94,0.35)",
     },
-    userAvatar: {
-        width: "36px",
-        height: "36px",
-        borderRadius: "10px",
-        background: "rgba(168, 85, 247, 0.1)",
-        border: "1px solid rgba(168, 85, 247, 0.2)",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        color: "#c084fc",
-        fontSize: "16px",
-        flexShrink: 0,
-    },
+
     messageBubble: {
-        maxWidth: "80%",
-        padding: "16px 20px",
-        borderRadius: "18px",
-        fontSize: "15px",
-        lineHeight: "1.6",
+        maxWidth: "78%",
+        padding: "16px 18px",
+        borderRadius: "20px",
+        boxShadow: "0 10px 25px rgba(0,0,0,0.15)",
+        wordBreak: "break-word",
     },
+
     botBubble: {
-        background: "rgba(30, 41, 59, 0.5)",
-        border: "1px solid rgba(255, 255, 255, 0.05)",
-        color: "#e2e8f0",
-        borderTopLeftRadius: "2px",
+        background: "rgba(255,255,255,0.10)",
+        color: "#f8fafc",
+        borderTopLeftRadius: "8px",
+        border: "1px solid rgba(255,255,255,0.08)",
     },
+
     userBubble: {
-        background: "linear-gradient(135deg, #6366f1 0%, #4f46e5 100%)",
-        color: "#fff",
-        borderTopRightRadius: "2px",
-        boxShadow: "0 10px 15px -3px rgba(99, 102, 241, 0.2)",
+        background: "linear-gradient(135deg, #22c55e, #14b8a6)",
+        color: "#ffffff",
+        borderTopRightRadius: "8px",
     },
-    messageSender: {
-        fontSize: "11px",
-        fontWeight: "600",
-        textTransform: "uppercase",
-        letterSpacing: "0.05em",
-        marginBottom: "6px",
-        opacity: "0.6",
-    },
-    messageText: {
-        whiteSpace: "pre-wrap",
-    },
+
     deleteButton: {
         position: "absolute",
         top: "10px",
         right: "10px",
-        background: "transparent",
+        width: "26px",
+        height: "26px",
+        borderRadius: "8px",
         border: "none",
-        color: "rgba(255, 255, 255, 0.3)",
-        cursor: "pointer",
-        padding: "5px",
-        borderRadius: "5px",
+        background: "rgba(0,0,0,0.18)",
+        color: "#fff",
         display: "flex",
-        alignItems: "center",
         justifyContent: "center",
-    },
-    inputArea: {
-        padding: "20px 30px",
-        background: "rgba(0, 0, 0, 0.2)",
-        borderTop: "1px solid rgba(255, 255, 255, 0.05)",
-        display: "flex",
-        gap: "15px",
-    },
-    input: {
-        flex: 1,
-        background: "rgba(15, 23, 42, 0.6)",
-        border: "1px solid rgba(255, 255, 255, 0.1)",
-        borderRadius: "14px",
-        padding: "14px 20px",
-        color: "#fff",
-        fontSize: "15px",
-        outline: "none",
-        transition: "all 0.2s ease",
-    },
-    button: {
-        background: "linear-gradient(135deg, #6366f1 0%, #a855f7 100%)",
-        color: "#fff",
-        border: "none",
-        borderRadius: "14px",
-        padding: "0 25px",
-        fontSize: "15px",
-        fontWeight: "600",
+        alignItems: "center",
         cursor: "pointer",
-        transition: "all 0.2s ease",
-        boxShadow: "0 10px 15px -3px rgba(99, 102, 241, 0.2)",
     },
+
+    messageSender: {
+        fontSize: "13px",
+        fontWeight: "700",
+        marginBottom: "8px",
+        opacity: 0.9,
+    },
+
+    messageText: {
+        fontSize: "15px",
+        lineHeight: "1.7",
+        whiteSpace: "pre-wrap",
+    },
+
     markdownWrapper: {
-        overflowWrap: "anywhere",
+        fontSize: "15px",
+        lineHeight: "1.75",
     },
+
     paragraph: {
         margin: "0 0 12px 0",
     },
+
     ul: {
-        margin: "0 0 12px 20px",
+        margin: "8px 0 12px 20px",
         padding: 0,
     },
+
     ol: {
-        margin: "0 0 12px 20px",
+        margin: "8px 0 12px 20px",
         padding: 0,
     },
+
     li: {
         marginBottom: "6px",
     },
+
     inlineCode: {
-        background: "rgba(255, 255, 255, 0.1)",
+        background: "rgba(15, 23, 42, 0.7)",
+        color: "#93c5fd",
         padding: "2px 6px",
-        borderRadius: "4px",
-        fontSize: "0.9em",
-        fontFamily: "monospace",
-        color: "#818cf8",
+        borderRadius: "6px",
+        fontSize: "13px",
+        fontFamily: "Consolas, Monaco, monospace",
     },
-    codeBlockContainer: {
-        margin: "15px 0",
-        borderRadius: "12px",
+
+    codeBlockWrapper: {
+        marginTop: "10px",
+        marginBottom: "14px",
+        borderRadius: "14px",
         overflow: "hidden",
-        border: "1px solid rgba(255, 255, 255, 0.1)",
+        border: "1px solid rgba(255,255,255,0.08)",
+        background: "#111827",
     },
+
     codeHeader: {
-        background: "#1e1e2e",
-        padding: "8px 16px",
         display: "flex",
         justifyContent: "space-between",
         alignItems: "center",
-        borderBottom: "1px solid rgba(255, 255, 255, 0.05)",
+        padding: "10px 14px",
+        background: "#0b1220",
+        borderBottom: "1px solid rgba(255,255,255,0.08)",
     },
-    codeLang: {
-        fontSize: "12px",
-        color: "#94a3b8",
-        textTransform: "uppercase",
-        fontWeight: "600",
+
+    codeLanguage: {
+        color: "#e5e7eb",
+        fontSize: "13px",
+        fontWeight: "700",
+        textTransform: "capitalize",
     },
-    copyBtn: {
-        background: "transparent",
-        border: "none",
-        color: "#94a3b8",
+
+    copyButton: {
         display: "flex",
         alignItems: "center",
         gap: "6px",
-        fontSize: "11px",
+        background: "transparent",
+        border: "1px solid rgba(255,255,255,0.12)",
+        color: "#e5e7eb",
+        padding: "6px 10px",
+        borderRadius: "8px",
         cursor: "pointer",
-        padding: "4px 8px",
-        borderRadius: "4px",
-        transition: "all 0.2s ease",
+        fontSize: "13px",
     },
-    syntaxContent: {
+
+    syntaxHighlighter: {
         margin: 0,
-        padding: "20px",
+        padding: "16px",
+        background: "#111827",
         fontSize: "14px",
-        lineHeight: "1.5",
+        lineHeight: "1.6",
+        overflowX: "auto",
     },
+
     tableWrapper: {
         overflowX: "auto",
-        margin: "15px 0",
-        borderRadius: "10px",
-        border: "1px solid rgba(255, 255, 255, 0.1)",
+        marginTop: "10px",
+        marginBottom: "14px",
+        borderRadius: "12px",
     },
+
     table: {
         width: "100%",
         borderCollapse: "collapse",
-        fontSize: "14px",
+        background: "rgba(255,255,255,0.06)",
     },
+
     th: {
-        background: "rgba(255, 255, 255, 0.05)",
-        padding: "12px 15px",
         textAlign: "left",
-        borderBottom: "1px solid rgba(255, 255, 255, 0.1)",
-        color: "#94a3b8",
+        padding: "10px 12px",
+        border: "1px solid rgba(255,255,255,0.08)",
+        background: "rgba(255,255,255,0.08)",
     },
+
     td: {
-        padding: "10px 15px",
-        borderBottom: "1px solid rgba(255, 255, 255, 0.05)",
+        padding: "10px 12px",
+        border: "1px solid rgba(255,255,255,0.08)",
     },
+
     blockquote: {
-        margin: "15px 0",
-        padding: "10px 20px",
-        borderLeft: "4px solid #6366f1",
-        background: "rgba(99, 102, 241, 0.05)",
-        borderRadius: "0 8px 8px 0",
-        color: "#cbd5e1",
-        fontStyle: "italic",
+        margin: "10px 0",
+        padding: "10px 14px",
+        borderLeft: "4px solid #60a5fa",
+        background: "rgba(96,165,250,0.08)",
+        borderRadius: "8px",
+        color: "#dbeafe",
     },
+
     h1: {
-        fontSize: "22px",
-        margin: "20px 0 10px 0",
+        fontSize: "24px",
+        margin: "8px 0 12px 0",
     },
+
     h2: {
-        fontSize: "18px",
-        margin: "18px 0 10px 0",
+        fontSize: "20px",
+        margin: "8px 0 12px 0",
     },
+
     h3: {
-        fontSize: "16px",
-        margin: "16px 0 8px 0",
+        fontSize: "17px",
+        margin: "8px 0 10px 0",
     },
-    typing: {
+
+    typingDots: {
         display: "flex",
-        gap: "4px",
-        padding: "4px 0",
+        gap: "6px",
+        alignItems: "center",
+        height: "24px",
     },
+
     dot: {
-        width: "6px",
-        height: "6px",
-        background: "#94a3b8",
+        width: "8px",
+        height: "8px",
         borderRadius: "50%",
+        background: "#cbd5e1",
+        display: "inline-block",
     },
+
+    inputArea: {
+        marginTop: "18px",
+        display: "flex",
+        gap: "14px",
+        alignItems: "center",
+        flexShrink: 0,
+    },
+
+    input: {
+        flex: 1,
+        height: "58px",
+        padding: "0 20px",
+        borderRadius: "18px",
+        border: "1px solid rgba(255,255,255,0.14)",
+        background: "rgba(255,255,255,0.08)",
+        color: "#fff",
+        fontSize: "16px",
+        outline: "none",
+        backdropFilter: "blur(8px)",
+    },
+
+    button: {
+        height: "58px",
+        minWidth: "120px",
+        padding: "0 28px",
+        borderRadius: "18px",
+        border: "none",
+        background: "linear-gradient(135deg, #3b82f6, #8b5cf6)",
+        color: "#fff",
+        fontWeight: "700",
+        fontSize: "16px",
+        cursor: "pointer",
+        boxShadow: "0 10px 25px rgba(59,130,246,0.35)",
+    },
+
     historyOverlay: {
         position: "absolute",
-        top: 0,
-        left: 0,
-        width: "100%",
-        height: "100%",
-        background: "rgba(0, 0, 0, 0.4)",
-        zIndex: 50,
+        inset: 0,
+        background: "rgba(0,0,0,0.35)",
+        backdropFilter: "blur(6px)",
+        zIndex: 10,
         display: "flex",
         justifyContent: "flex-end",
     },
+
     historyPanel: {
-        width: "350px",
+        width: "380px",
         height: "100%",
-        background: "#171923",
-        borderLeft: "1px solid rgba(255, 255, 255, 0.1)",
+        background: "rgba(15,23,42,0.95)",
+        borderLeft: "1px solid rgba(255,255,255,0.08)",
+        padding: "20px",
         display: "flex",
         flexDirection: "column",
     },
+
     historyHeader: {
-        padding: "20px",
-        borderBottom: "1px solid rgba(255, 255, 255, 0.08)",
         display: "flex",
         justifyContent: "space-between",
         alignItems: "center",
+        marginBottom: "18px",
     },
+
     historyHeaderLeft: {
         display: "flex",
         alignItems: "center",
         gap: "10px",
-        color: "#94a3b8",
+        color: "#fff",
     },
+
     historyTitle: {
-        fontSize: "16px",
-        fontWeight: "600",
         margin: 0,
+        fontSize: "18px",
+        color: "#fff",
     },
+
+    iconButton: {
+        width: "36px",
+        height: "36px",
+        borderRadius: "10px",
+        border: "1px solid rgba(255,255,255,0.12)",
+        background: "rgba(255,255,255,0.08)",
+        color: "#fff",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        cursor: "pointer",
+    },
+
     historyList: {
         flex: 1,
         overflowY: "auto",
-        padding: "15px",
-    },
-    emptyHistory: {
-        textAlign: "center",
-        color: "#4a5568",
-        marginTop: "40px",
-        fontSize: "14px",
-    },
-    historyItem: {
-        padding: "15px",
-        borderRadius: "12px",
-        background: "rgba(255, 255, 255, 0.03)",
-        border: "1px solid rgba(255, 255, 255, 0.05)",
-        marginBottom: "12px",
-        transition: "all 0.2s ease",
         display: "flex",
         flexDirection: "column",
+        gap: "12px",
+    },
+
+    emptyHistory: {
+        color: "rgba(255,255,255,0.6)",
+        padding: "16px",
+        borderRadius: "12px",
+        background: "rgba(255,255,255,0.04)",
+    },
+
+    historyItem: {
+        display: "flex",
         gap: "10px",
+        alignItems: "center",
+        padding: "12px",
+        borderRadius: "14px",
+        background: "rgba(255,255,255,0.05)",
+        border: "1px solid rgba(255,255,255,0.06)",
     },
+
     historyContent: {
+        flex: 1,
         cursor: "pointer",
+        minWidth: 0,
     },
+
     historyItemTitle: {
+        color: "#fff",
         fontSize: "14px",
         fontWeight: "600",
-        marginBottom: "5px",
-        color: "#e2e8f0",
+        marginBottom: "4px",
         whiteSpace: "nowrap",
         overflow: "hidden",
         textOverflow: "ellipsis",
     },
+
     historyItemMeta: {
-        fontSize: "11px",
-        color: "#718096",
+        color: "rgba(255,255,255,0.62)",
+        fontSize: "12px",
     },
+
     historyItemActions: {
         display: "flex",
-        justifyContent: "flex-end",
-        gap: "10px",
-        borderTop: "1px solid rgba(255, 255, 255, 0.05)",
-        paddingTop: "10px",
-    },
-    historyLoadBtn: {
-        fontSize: "12px",
-        padding: "4px 10px",
-        background: "rgba(99, 102, 241, 0.1)",
-        border: "1px solid rgba(99, 102, 241, 0.2)",
-        color: "#818cf8",
-        borderRadius: "6px",
-        cursor: "pointer",
-    },
-    historyDeleteBtn: {
-        background: "transparent",
-        border: "none",
-        color: "#e53e3e",
-        cursor: "pointer",
-        display: "flex",
         alignItems: "center",
-        opacity: 0.6,
+        gap: "8px",
     },
-    iconButton: {
-        background: "transparent",
+
+    historyLoadBtn: {
         border: "none",
-        color: "#94a3b8",
+        background: "linear-gradient(135deg, #3b82f6, #8b5cf6)",
+        color: "#fff",
+        borderRadius: "8px",
+        padding: "8px 12px",
+        cursor: "pointer",
+        fontSize: "12px",
+        fontWeight: "600",
+    },
+
+    historyDeleteBtn: {
+        width: "34px",
+        height: "34px",
+        borderRadius: "8px",
+        border: "1px solid rgba(255,255,255,0.08)",
+        background: "rgba(255,255,255,0.06)",
+        color: "#fff",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
         cursor: "pointer",
     },
 };
