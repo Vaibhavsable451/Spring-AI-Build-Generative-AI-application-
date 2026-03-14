@@ -98,7 +98,7 @@ function App() {
         try {
             const baseUrl = (
                 process.env.REACT_APP_API_URL ||
-                "https://spring-ai-build-generative-ai-application.onrender.com"
+                "https://spring-ai-build-generative-ai.onrender.com"
             ).replace(/\/+$/, "");
 
             const response = await axios.get(`${baseUrl}/user/chat`, {
