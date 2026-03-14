@@ -1,4 +1,4 @@
-﻿import React, {
+import React, {
     useState,
     useRef,
     useEffect
@@ -44,7 +44,7 @@ function App() {
     const hasAskedOnce = useRef(false);
 
     const scrollToBottom = () => {
-        chatEndRef.current ? .scrollIntoView({
+        chatEndRef.current?.scrollIntoView({
             behavior: "smooth"
         });
     };
@@ -62,7 +62,7 @@ function App() {
             setHistory((prev) => [{
                     id: Date.now(),
                     timestamp: new Date().toLocaleString(),
-                    title: messages.find((m) => m.from === userName) ? .text ? .slice(0, 40) ||
+                    title: messages.find((m) => m.from === userName)?.text?.slice(0, 40) ||
                         "New Chat",
                     messages: [...messages],
                 },
@@ -148,535 +148,211 @@ function App() {
         setInput("");
     };
 
-    return ( <
-        div style = {
-            styles.page
-        } >
-        <
-        div style = {
-            styles.backgroundGlow1
-        } > < /div> <
-        div style = {
-            styles.backgroundGlow2
-        } > < /div> <
-        div style = {
-            styles.backgroundGlow3
-        } > < /div>
+    return (
+        <div style={styles.page}>
+            <div style={styles.backgroundGlow1}></div>
+            <div style={styles.backgroundGlow2}></div>
+            <div style={styles.backgroundGlow3}></div>
 
-        {
-            showHistory && ( <
-                div style = {
-                    styles.historyOverlay
-                } >
-                <
-                div style = {
-                    styles.historyPanel
-                } >
-                <
-                div style = {
-                    styles.historyHeader
-                } >
-                <
-                div style = {
-                    styles.historyHeaderLeft
-                } >
-                <
-                FiClock size = {
-                    18
-                }
-                /> <
-                h3 style = {
-                    styles.historyTitle
-                } > Chat History < /h3> <
-                /div> <
-                button onClick = {
-                    () => setShowHistory(false)
-                }
-                style = {
-                    styles.iconButton
-                } >
-                <
-                FiX size = {
-                    18
-                }
-                /> <
-                /button> <
-                /div>
+            {showHistory && (
+                <div style={styles.historyOverlay}>
+                    <div style={styles.historyPanel}>
+                        <div style={styles.historyHeader}>
+                            <div style={styles.historyHeaderLeft}>
+                                <FiClock size={18} />
+                                <h3 style={styles.historyTitle}>Chat History</h3>
+                            </div>
+                            <button onClick={() => setShowHistory(false)} style={styles.iconButton}>
+                                <FiX size={18} />
+                            </button>
+                        </div>
 
-                <
-                div style = {
-                    styles.historyList
-                } > {
-                    history.length === 0 ? ( <
-                        div style = {
-                            styles.emptyHistory
-                        } > No history yet < /div>
-                    ) : (
-                        history.map((item) => ( <
-                            div key = {
-                                item.id
-                            }
-                            style = {
-                                styles.historyItem
-                            } >
-                            <
-                            div style = {
-                                styles.historyContent
-                            }
-                            onClick = {
-                                () => loadHistory(item)
-                            } >
-                            <
-                            div style = {
-                                styles.historyItemTitle
-                            } > {
-                                item.title
-                            } < /div> <
-                            div style = {
-                                styles.historyItemMeta
-                            } > {
-                                item.timestamp
-                            }• {
-                                item.messages.length
-                            }
-                            messages <
-                            /div> <
-                            /div>
+                        <div style={styles.historyList}>
+                            {history.length === 0 ? (
+                                <div style={styles.emptyHistory}>No history yet</div>
+                            ) : (
+                                history.map((item) => (
+                                    <div key={item.id} style={styles.historyItem}>
+                                        <div style={styles.historyContent} onClick={() => loadHistory(item)}>
+                                            <div style={styles.historyItemTitle}>{item.title}</div>
+                                            <div style={styles.historyItemMeta}>
+                                                {item.timestamp} • {item.messages.length} messages
+                                            </div>
+                                        </div>
 
-                            <
-                            div style = {
-                                styles.historyItemActions
-                            } >
-                            <
-                            button onClick = {
-                                () => loadHistory(item)
-                            }
-                            style = {
-                                styles.historyLoadBtn
-                            } >
-                            Load <
-                            /button> <
-                            button onClick = {
-                                () => deleteHistory(item.id)
-                            }
-                            style = {
-                                styles.historyDeleteBtn
-                            } >
-                            <
-                            FiTrash2 size = {
-                                14
-                            }
-                            /> <
-                            /button> <
-                            /div> <
-                            /div>
-                        ))
-                    )
-                } <
-                /div> <
-                /div> <
-                /div>
-            )
-        }
+                                        <div style={styles.historyItemActions}>
+                                            <button onClick={() => loadHistory(item)} style={styles.historyLoadBtn}>
+                                                Load
+                                            </button>
+                                            <button onClick={() => deleteHistory(item.id)} style={styles.historyDeleteBtn}>
+                                                <FiTrash2 size={14} />
+                                            </button>
+                                        </div>
+                                    </div>
+                                ))
+                            )}
+                        </div>
+                    </div>
+                </div>
+            )}
 
-        <
-        div style = {
-            styles.container
-        } >
-        <
-        div style = {
-            styles.header
-        } >
-        <
-        div style = {
-            styles.logoBox
-        } >
-        <
-        RiRobot3Fill style = {
-            styles.logoIcon
-        }
-        /> <
-        /div>
+            <div style={styles.container}>
+                <div style={styles.header}>
+                    <div style={styles.logoBox}>
+                        <RiRobot3Fill style={styles.logoIcon} />
+                    </div>
 
-        <
-        div style = {
-            styles.headerText
-        } >
-        <
-        h1 style = {
-            styles.title
-        } > Kairo AI Chat < /h1> <
-        p style = {
-            styles.subtitle
-        } > Smart assistant• Markdown + Code Support < /p> <
-        /div>
+                    <div style={styles.headerText}>
+                        <h1 style={styles.title}>Kairo AI Chat</h1>
+                        <p style={styles.subtitle}>Smart assistant • Markdown + Code Support</p>
+                    </div>
 
-        <
-        div style = {
-            styles.headerActions
-        } >
-        <
-        button onClick = {
-            () => setShowHistory(true)
-        }
-        style = {
-            styles.headerIconBtn
-        }
-        title = "Chat history" >
-        <
-        FiClock size = {
-            18
-        }
-        /> <
-        /button>
+                    <div style={styles.headerActions}>
+                        <button onClick={() => setShowHistory(true)} style={styles.headerIconBtn} title="Chat history">
+                            <FiClock size={18} />
+                        </button>
 
-        <
-        button onClick = {
-            clearChat
-        }
-        style = {
-            styles.headerIconBtn
-        }
-        title = "Clear chat" >
-        <
-        FiTrash2 size = {
-            18
-        }
-        /> <
-        /button> <
-        /div> <
-        /div>
+                        <button onClick={clearChat} style={styles.headerIconBtn} title="Clear chat">
+                            <FiTrash2 size={18} />
+                        </button>
+                    </div>
+                </div>
 
-        <
-        div style = {
-            styles.chatBox
-        } > {
-            messages.map((msg, idx) => {
-                const isUser = msg.from === userName;
+                <div style={styles.chatBox}>
+                    {messages.map((msg, idx) => {
+                        const isUser = msg.from === userName;
 
-                return ( <
-                    div key = {
-                        idx
-                    }
-                    style = {
-                        {
-                            ...styles.messageRow,
-                            justifyContent: isUser ? "flex-end" : "flex-start",
-                        }
-                    } >
-                    {
-                        !isUser && ( <
-                            div style = {
-                                styles.botAvatar
-                            } >
-                            <
-                            TbRobot / >
-                            <
-                            /div>
-                        )
-                    }
+                        return (
+                            <div key={idx} style={{ ...styles.messageRow, justifyContent: isUser ? "flex-end" : "flex-start" }}>
+                                {!isUser && (
+                                    <div style={styles.botAvatar}>
+                                        <TbRobot />
+                                    </div>
+                                )}
 
-                    <
-                    div style = {
-                        {
-                            ...styles.messageBubble,
-                            ...(isUser ? styles.userBubble : styles.botBubble),
-                            position: "relative",
-                            paddingRight: "46px",
-                        }
-                    } >
-                    <
-                    div style = {
-                        styles.messageSender
-                    } > {
-                        msg.from
-                    } < /div>
+                                <div style={{ ...styles.messageBubble, ...(isUser ? styles.userBubble : styles.botBubble), position: "relative", paddingRight: "46px" }}>
+                                    <div style={styles.messageSender}>{msg.from}</div>
 
-                    {
-                        isUser ? ( <
-                            div style = {
-                                styles.messageText
-                            } > {
-                                msg.text
-                            } < /div>
-                        ) : ( <
-                            MarkdownMessage content = {
-                                msg.text
-                            }
-                            />
-                        )
-                    }
+                                    {isUser ? (
+                                        <div style={styles.messageText}>{msg.text}</div>
+                                    ) : (
+                                        <MarkdownMessage content={msg.text} />
+                                    )}
 
-                    <
-                    button onClick = {
-                        () => deleteMessage(idx)
-                    }
-                    style = {
-                        styles.deleteButton
-                    }
-                    title = "Delete message" >
-                    <
-                    FiTrash2 size = {
-                        14
-                    }
-                    /> <
-                    /button> <
-                    /div>
+                                    <button onClick={() => deleteMessage(idx)} style={styles.deleteButton} title="Delete message">
+                                        <FiTrash2 size={14} />
+                                    </button>
+                                </div>
 
-                    {
-                        isUser && ( <
-                            div style = {
-                                styles.userAvatar
-                            } >
-                            <
-                            FaUser / >
-                            <
-                            /div>
-                        )
-                    } <
-                    /div>
-                );
-            })
-        }
+                                {isUser && (
+                                    <div style={styles.userAvatar}>
+                                        <FaUser />
+                                    </div>
+                                )}
+                            </div>
+                        );
+                    })}
 
-        {
-            loading && ( <
-                div style = {
-                    {
-                        ...styles.messageRow,
-                        justifyContent: "flex-start",
-                    }
-                } >
-                <
-                div style = {
-                    styles.botAvatar
-                } >
-                <
-                TbRobot / >
-                <
-                /div> <
-                div style = {
-                    {
-                        ...styles.messageBubble,
-                        ...styles.botBubble,
-                    }
-                } >
-                <
-                div style = {
-                    styles.messageSender
-                } > Kairo < /div> <
-                TypingDots / >
-                <
-                /div> <
-                /div>
-            )
-        }
+                    {loading && (
+                        <div style={{ ...styles.messageRow, justifyContent: "flex-start" }}>
+                            <div style={styles.botAvatar}>
+                                <TbRobot />
+                            </div>
+                            <div style={{ ...styles.messageBubble, ...styles.botBubble }}>
+                                <div style={styles.messageSender}>Kairo</div>
+                                <TypingDots />
+                            </div>
+                        </div>
+                    )}
 
-        <
-        div ref = {
-            chatEndRef
-        }
-        /> <
-        /div>
+                    <div ref={chatEndRef} />
+                </div>
 
-        <
-        div style = {
-            styles.inputArea
-        } >
-        <
-        input style = {
-            styles.input
-        }
-        type = "text"
-        placeholder = "Ask anything..."
-        value = {
-            input
-        }
-        onChange = {
-            (e) => setInput(e.target.value)
-        }
-        onKeyDown = {
-            (e) => e.key === "Enter" && sendMessage()
-        }
-        /> <
-        button style = {
-            styles.button
-        }
-        onClick = {
-            sendMessage
-        } >
-        Send <
-        /button> <
-        /div> <
-        /div> <
-        /div>
+                <div style={styles.inputArea}>
+                    <input
+                        style={styles.input}
+                        type="text"
+                        placeholder="Ask anything..."
+                        value={input}
+                        onChange={(e) => setInput(e.target.value)}
+                        onKeyDown={(e) => e.key === "Enter" && sendMessage()}
+                    />
+                    <button style={styles.button} onClick={sendMessage}>
+                        Send
+                    </button>
+                </div>
+            </div>
+        </div>
     );
 }
 
-function MarkdownMessage({
-    content
-}) {
-    return ( <
-        div style = {
-            styles.markdownWrapper
-        } >
-        <
-        ReactMarkdown remarkPlugins = {
-            [remarkGfm]
-        }
-        components = {
-            {
-                code({
-                        inline,
-                        className,
-                        children,
-                        ...props
-                    }) {
+function MarkdownMessage({ content }) {
+    return (
+        <div style={styles.markdownWrapper}>
+            <ReactMarkdown
+                remarkPlugins={[remarkGfm]}
+                components={{
+                    code({ inline, className, children, ...props }) {
                         const match = /language-(\w+)/.exec(className || "");
                         const language = match ? match[1] : "text";
                         const codeText = String(children).replace(/\n$/, "");
 
                         if (!inline) {
-                            return <CodeBlock code = {
-                                codeText
-                            }
-                            language = {
-                                language
-                            }
-                            />;
+                            return <CodeBlock code={codeText} language={language} />;
                         }
 
-                        return ( <
-                            code style = {
-                                styles.inlineCode
-                            } {
-                                ...props
-                            } > {
-                                children
-                            } <
-                            /code>
+                        return (
+                            <code style={styles.inlineCode} {...props}>
+                                {children}
+                            </code>
                         );
                     },
-                    p({
-                        children
-                    }) {
-                        return <p style = {
-                            styles.paragraph
-                        } > {
-                            children
-                        } < /p>;
+                    p({ children }) {
+                        return <p style={styles.paragraph}>{children}</p>;
                     },
-                    ul({
-                        children
-                    }) {
-                        return <ul style = {
-                            styles.ul
-                        } > {
-                            children
-                        } < /ul>;
+                    ul({ children }) {
+                        return <ul style={styles.ul}>{children}</ul>;
                     },
-                    ol({
-                        children
-                    }) {
-                        return <ol style = {
-                            styles.ol
-                        } > {
-                            children
-                        } < /ol>;
+                    ol({ children }) {
+                        return <ol style={styles.ol}>{children}</ol>;
                     },
-                    li({
-                        children
-                    }) {
-                        return <li style = {
-                            styles.li
-                        } > {
-                            children
-                        } < /li>;
+                    li({ children }) {
+                        return <li style={styles.li}>{children}</li>;
                     },
-                    table({
-                        children
-                    }) {
-                        return ( <
-                            div style = {
-                                styles.tableWrapper
-                            } >
-                            <
-                            table style = {
-                                styles.table
-                            } > {
-                                children
-                            } < /table> <
-                            /div>
+                    table({ children }) {
+                        return (
+                            <div style={styles.tableWrapper}>
+                                <table style={styles.table}>{children}</table>
+                            </div>
                         );
                     },
-                    th({
-                        children
-                    }) {
-                        return <th style = {
-                            styles.th
-                        } > {
-                            children
-                        } < /th>;
+                    th({ children }) {
+                        return <th style={styles.th}>{children}</th>;
                     },
-                    td({
-                        children
-                    }) {
-                        return <td style = {
-                            styles.td
-                        } > {
-                            children
-                        } < /td>;
+                    td({ children }) {
+                        return <td style={styles.td}>{children}</td>;
                     },
-                    blockquote({
-                        children
-                    }) {
-                        return <blockquote style = {
-                            styles.blockquote
-                        } > {
-                            children
-                        } < /blockquote>;
+                    blockquote({ children }) {
+                        return <blockquote style={styles.blockquote}>{children}</blockquote>;
                     },
-                    h1({
-                        children
-                    }) {
-                        return <h1 style = {
-                            styles.h1
-                        } > {
-                            children
-                        } < /h1>;
+                    h1({ children }) {
+                        return <h1 style={styles.h1}>{children}</h1>;
                     },
-                    h2({
-                        children
-                    }) {
-                        return <h2 style = {
-                            styles.h2
-                        } > {
-                            children
-                        } < /h2>;
+                    h2({ children }) {
+                        return <h2 style={styles.h2}>{children}</h2>;
                     },
-                    h3({
-                        children
-                    }) {
-                        return <h3 style = {
-                            styles.h3
-                        } > {
-                            children
-                        } < /h3>;
+                    h3({ children }) {
+                        return <h3 style={styles.h3}>{children}</h3>;
                     },
-            }
-        } >
-        {
-            content
-        } <
-        /ReactMarkdown> <
-        /div>
+                }}
+            >
+                {content}
+            </ReactMarkdown>
+        </div>
     );
 }
 
-function CodeBlock({
-    code,
-    language
-}) {
+function CodeBlock({ code, language }) {
     const [copied, setCopied] = useState(false);
 
     const handleCopy = () => {
@@ -684,76 +360,32 @@ function CodeBlock({
         setTimeout(() => setCopied(false), 2000);
     };
 
-    return ( <
-        div style = {
-            styles.codeBlockContainer
-        } >
-        <
-        div style = {
-            styles.codeHeader
-        } >
-        <
-        span style = {
-            styles.codeLang
-        } > {
-            language
-        } < /span> <
-        CopyToClipboard text = {
-            code
-        }
-        onCopy = {
-            handleCopy
-        } >
-        <
-        button style = {
-            styles.copyBtn
-        } > {
-            copied ? < FiCheck size = {
-                14
-            }
-            /> : <FiCopy size={14} / >
-        } <
-        span > {
-            copied ? "Copied" : "Copy"
-        } < /span> <
-        /button> <
-        /CopyToClipboard> <
-        /div>
+    return (
+        <div style={styles.codeBlockContainer}>
+            <div style={styles.codeHeader}>
+                <span style={styles.codeLang}>{language}</span>
+                <CopyToClipboard text={code} onCopy={handleCopy}>
+                    <button style={styles.copyBtn}>
+                        {copied ? <FiCheck size={14} /> : <FiCopy size={14} />}
+                        <span>{copied ? "Copied" : "Copy"}</span>
+                    </button>
+                </CopyToClipboard>
+            </div>
 
-        <
-        SyntaxHighlighter language = {
-            language
-        }
-        style = {
-            vscDarkPlus
-        }
-        customStyle = {
-            styles.syntaxContent
-        } >
-        {
-            code
-        } <
-        /SyntaxHighlighter> <
-        /div>
+            <SyntaxHighlighter language={language} style={vscDarkPlus} customStyle={styles.syntaxContent}>
+                {code}
+            </SyntaxHighlighter>
+        </div>
     );
 }
 
 function TypingDots() {
-    return ( <
-        div style = {
-            styles.typing
-        } >
-        <
-        span style = {
-            styles.dot
-        } > < /span> <
-        span style = {
-            styles.dot
-        } > < /span> <
-        span style = {
-            styles.dot
-        } > < /span> <
-        /div>
+    return (
+        <div style={styles.typing}>
+            <span style={styles.dot}></span>
+            <span style={styles.dot}></span>
+            <span style={styles.dot}></span>
+        </div>
     );
 }
 
