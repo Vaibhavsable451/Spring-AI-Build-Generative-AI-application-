@@ -97,6 +97,7 @@ function App() {
 
         try {
             const baseUrl = (process.env.REACT_APP_API_URL || "http://localhost:8080").replace(/\/+$/, "");
+            console.log("Requesting from:", `${baseUrl}/user/chat`);
             const response = await axios.get(`${baseUrl}/user/chat`, {
                 params: {
                     question
