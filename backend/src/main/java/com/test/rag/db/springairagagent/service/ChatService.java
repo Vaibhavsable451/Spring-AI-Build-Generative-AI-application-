@@ -11,6 +11,7 @@ import java.util.List;
 
 @Service
 public class ChatService {
+
     private final ChatModel chatModel;
 
     public ChatService(ChatModel chatModel) {
@@ -18,15 +19,23 @@ public class ChatService {
     }
 
     public String getMyResponse(String question) {
+        System.out.println("User Question: " + question);
 
-        System.out.println("user Question:" + question);
-        Prompt prompt = new Prompt(List.of(new SystemMessage("""
-                    You are Sam, a polite and knowledgeable AI assistant.
-                    Then, answer the user's question politely and clearly.
-                    Always be respectful and never respond rudely, even if provoked.
-                """), new UserMessage(question)));
+        Prompt prompt = new Prompt(List.of(
+                new SystemMessage("""
+                        You are Sam, a polite and knowledgeable AI assistant.
+                        Answer the user's question politely and clearly.
+                        Always be respectful and never respond rudely, even if provoked.
+                        """),
+                new UserMessage(question)
+        ));
 
         ChatResponse response = chatModel.call(prompt);
+
+        if (response == null || response.getResult() == null || response.getResult().getOutput() == null) {
+            throw new RuntimeException("Empty response from AI model");
+        }
+
         return response.getResult().getOutput().getText();
     }
 }
