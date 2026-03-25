@@ -6,7 +6,7 @@ import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { 
-    FiSend, FiTrash2, FiClock, FiX, FiCheck, FiCopy
+    FiSend, FiTrash2, FiClock, FiX, FiCheck, FiCopy, FiRefreshCw
 } from 'react-icons/fi';
 import { RiRobot3Fill } from 'react-icons/ri';
 import { TbRobot } from 'react-icons/tb';
