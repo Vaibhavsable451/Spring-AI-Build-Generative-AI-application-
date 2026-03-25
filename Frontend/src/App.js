@@ -81,7 +81,7 @@ function App() {
     const deleteHistory = (id) => {
         setHistory((prev) => prev.filter((item) => item.id !== id));
     };
-
+    const askQuestion = async (question, showUserMessage = true) => {
         if (!question.trim() || loading) return;
 
         if (showUserMessage) {
