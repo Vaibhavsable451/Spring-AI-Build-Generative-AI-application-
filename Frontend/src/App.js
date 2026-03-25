@@ -96,7 +96,7 @@ function App() {
 
         try {
             const baseUrl = (process.env.REACT_APP_API_URL || "https://spring-ai-build-generative-ai-application-ktur.onrender.com").replace(/\/+$/, "");
-            console.log(">>> Requesting:", `${baseUrl}/user/chat?question=${question}`);
+            console.log(">>> Requesting:", `${baseUrl}/user/chat?question=${encodeURIComponent(question)}`);
             
             const response = await axios.get(`${baseUrl}/user/chat`, {
                 params: {

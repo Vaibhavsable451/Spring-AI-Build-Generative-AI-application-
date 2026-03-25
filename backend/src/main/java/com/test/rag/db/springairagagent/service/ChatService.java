@@ -21,6 +21,12 @@ public class ChatService {
     public String getMyResponse(String question) {
         System.out.println(">>> [1/4] User Question received: " + question);
 
+        // TEST BYPASS: Type "test" in the chat to see if this works!
+        if (question.toLowerCase().contains("test")) {
+            System.out.println(">>> [BYPASS] Returning mock test response.");
+            return "Connection Successful! Your backend and frontend are talking to each other. The issue is your Groq API Key or connection.";
+        }
+
         try {
             System.out.println(">>> [2/4] Preparing AI prompt...");
             Prompt prompt = new Prompt(List.of(
