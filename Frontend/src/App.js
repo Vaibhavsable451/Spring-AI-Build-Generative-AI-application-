@@ -6,8 +6,7 @@ import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { 
-    FiSend, FiTrash2, FiClock, FiX, FiCheck, FiCopy, FiRefreshCw,
-    FiMenu, FiSettings, FiUser, FiInfo, FiLayout
+    FiSend, FiTrash2, FiClock, FiX, FiCheck, FiCopy
 } from 'react-icons/fi';
 import { RiRobot3Fill } from 'react-icons/ri';
 import { TbRobot } from 'react-icons/tb';
@@ -73,7 +72,7 @@ function App() {
             const baseUrl = (process.env.REACT_APP_API_URL || "https://spring-ai-build-generative-ai-application-ktur.onrender.com").replace(/\/+$/, "");
             const response = await axios.get(`${baseUrl}/user/chat`, {
                 params: { question },
-                timeout: 60000,
+                timeout: 30000,
             });
 
             const samReply = {
@@ -85,7 +84,7 @@ function App() {
         } catch (error) {
             setMessages(prev => [...prev, { 
                 from: "Kairo AI", 
-                text: `⚠️ Connection Issue: ${error.message}. Please check if the Render backend is still awake.` 
+                text: `⚠️ Connection Issue: ${error.message}` 
             }]);
         } finally {
             setLoading(false);
@@ -94,7 +93,7 @@ function App() {
 
     useEffect(() => {
         if (!hasAskedOnce.current) {
-            askQuestion("Hello! Who are you?", false);
+            askQuestion("Who are you?", false);
             hasAskedOnce.current = true;
         }
     }, []);
@@ -106,7 +105,7 @@ function App() {
     };
 
     return (
-        <div style={styles.page}>
+        <div style={styles.appWrapper}>
             <div style={styles.bgGlow1}></div>
             <div style={styles.bgGlow2}></div>
 
@@ -114,78 +113,65 @@ function App() {
                 <div style={styles.historyOverlay}>
                     <div style={styles.historyPanel}>
                         <div style={styles.historyHeader}>
-                            <div style={styles.historyHeaderLeft}>
-                                <FiClock size={18} />
-                                <h3 style={styles.historyTitle}>Your History</h3>
-                            </div>
-                            <button onClick={() => setShowHistory(false)} style={styles.iconBtn}>
-                                <FiX size={20} />
-                            </button>
+                            <h3 style={styles.historyTitle}>History</h3>
+                            <button onClick={() => setShowHistory(false)} style={styles.iconBtn}><FiX size={20} /></button>
                         </div>
                         <div style={styles.historyList}>
-                            {history.length === 0 ? (
-                                <div style={styles.emptyHistory}>No chats saved yet.</div>
-                            ) : (
+                            {history.length === 0 ? <div style={styles.emptyHistory}>No history yet</div> : 
                                 history.map(item => (
                                     <div key={item.id} style={styles.historyItem}>
                                         <div style={styles.historyContent} onClick={() => loadHistory(item)}>
                                             <div style={styles.historyItemTitle}>{item.title}</div>
                                             <div style={styles.historyItemMeta}>{item.timestamp}</div>
                                         </div>
-                                        <div style={styles.historyItemActions}>
-                                            <button onClick={() => deleteHistory(item.id)} style={styles.historyDeleteBtn}>
-                                                <FiTrash2 size={16} />
-                                            </button>
-                                        </div>
+                                        <button onClick={() => deleteHistory(item.id)} style={styles.deleteBtn}><FiTrash2 size={14} /></button>
                                     </div>
                                 ))
-                            )}
+                            }
                         </div>
                     </div>
                 </div>
             )}
 
-            <div style={styles.container}>
+            <div style={styles.mainContainer}>
                 <div style={styles.header}>
                     <div style={styles.logoBox}><RiRobot3Fill style={styles.logoIcon} /></div>
                     <div style={styles.headerText}>
-                        <h1 style={styles.title}>Kairo Assistant</h1>
-                        <p style={styles.subtitle}>Supercharged with Llama 3.1 & Spring AI</p>
+                        <h1 style={styles.title}>Kairo AI Assistant</h1>
+                        <p style={styles.subtitle}>Spring AI + Llama 3.1</p>
                     </div>
                     <div style={styles.headerActions}>
-                        <button onClick={() => setShowHistory(true)} style={styles.headerIconBtn} title="History"><FiClock size={20} /></button>
-                        <button onClick={clearChat} style={styles.headerIconBtn} title="Clear Chat"><FiTrash2 size={20} /></button>
+                        <button onClick={() => setShowHistory(true)} style={styles.headerIconBtn}><FiClock size={18} /></button>
+                        <button onClick={clearChat} style={styles.headerIconBtn}><FiTrash2 size={18} /></button>
                     </div>
                 </div>
 
-                <div style={styles.chatBox}>
-                    {messages.map((msg, idx) => {
-                        const isUser = msg.from === userName;
-                        return (
-                            <div key={idx} style={{...styles.messageRow, justifyContent: isUser ? 'flex-end' : 'flex-start'}}>
-                                {!isUser && <div style={styles.botAvatar}><TbRobot /></div>}
-                                <div style={{...styles.messageBubble, ...(isUser ? styles.userBubble : styles.botBubble)}}>
-                                    <div style={styles.messageSender}>{msg.from}</div>
-                                    {isUser ? (
-                                        <div style={styles.messageText}>{msg.text}</div>
-                                    ) : (
-                                        <MarkdownMessage content={msg.text} />
-                                    )}
+                <div style={styles.messagesArea}>
+                    <div style={styles.messagesCenter}>
+                        {messages.map((msg, idx) => {
+                            const isUser = msg.from === userName;
+                            return (
+                                <div key={idx} style={{...styles.messageRow, justifyContent: isUser ? 'flex-end' : 'flex-start'}}>
+                                    {!isUser && <div style={styles.botAvatar}><TbRobot /></div>}
+                                    <div style={{...styles.messageBubble, ...(isUser ? styles.userBubble : styles.botBubble)}}>
+                                        <div style={styles.messageSender}>{msg.from}</div>
+                                        {isUser ? <div style={styles.messageText}>{msg.text}</div> : <MarkdownMessage content={msg.text} />}
+                                    </div>
+                                    {isUser && <div style={styles.userAvatar}><FaUser /></div>}
                                 </div>
-                                {isUser && <div style={styles.userAvatar}><FaUser /></div>}
+                            );
+                        })}
+                        {loading && (
+                            <div style={{...styles.messageRow, justifyContent: 'flex-start'}}>
+                                <div style={styles.botAvatar}><TbRobot /></div>
+                                <div style={{...styles.messageBubble, ...styles.botBubble}}>
+                                    <div style={styles.messageSender}>Kairo AI</div>
+                                    <TypingDots />
+                                </div>
                             </div>
-                        );
-                    })}
-                    {loading && (
-                        <div style={{...styles.messageRow, justifyContent: 'flex-start'}}>
-                            <div style={styles.botAvatar}><TbRobot /></div>
-                            <div style={{...styles.messageBubble, ...styles.botBubble}}>
-                                <div style={styles.messageSender}>Kairo AI</div>
-                                <TypingDots />
-                            </div>
-                        </div>
-                    )}
-                    <div ref={chatEndRef} />
+                        )}
+                        <div ref={chatEndRef} />
+                    </div>
                 </div>
 
                 <div style={styles.inputArea}>
@@ -193,18 +179,12 @@ function App() {
                         <input 
                             style={styles.input}
                             type="text" 
-                            placeholder="Ask me anything..." 
+                            placeholder="Type your message..." 
                             value={input} 
                             onChange={(e) => setInput(e.target.value)} 
                             onKeyDown={(e) => e.key === 'Enter' && sendMessage()} 
                         />
-                        <button 
-                            style={{...styles.button, opacity: input.trim() ? 1 : 0.6}} 
-                            onClick={sendMessage}
-                            disabled={!input.trim()}
-                        >
-                            <FiSend size={20} />
-                        </button>
+                        <button style={styles.sendButton} onClick={sendMessage}><FiSend size={20} /></button>
                     </div>
                 </div>
             </div>
@@ -227,9 +207,7 @@ function MarkdownMessage({ content }) {
                         }
                         return <code style={styles.inlineCode} {...props}>{children}</code>;
                     },
-                    p: ({ children }) => <p style={styles.paragraph}>{children}</p>,
-                    ul: ({ children }) => <ul style={styles.ul}>{children}</ul>,
-                    li: ({ children }) => <li style={styles.li}>{children}</li>
+                    p: ({ children }) => <p style={styles.mb8}>{children}</p>,
                 }}
             >
                 {content}
@@ -245,21 +223,14 @@ function CodeBlock({ code, language }) {
         setTimeout(() => setCopied(false), 2000);
     };
     return (
-        <div style={styles.codeBlockContainer}>
+        <div style={styles.codeBlock}>
             <div style={styles.codeHeader}>
-                <span style={styles.codeLang}>{language}</span>
+                <span>{language}</span>
                 <CopyToClipboard text={code} onCopy={handleCopy}>
-                    <button style={styles.copyBtn}>
-                        {copied ? <FiCheck size={14} /> : <FiCopy size={16} />}
-                        <span>{copied ? 'Copied!' : 'Copy'}</span>
-                    </button>
+                    <button style={styles.copyBtn}>{copied ? <FiCheck /> : <FiCopy />} {copied ? 'Copied' : 'Copy'}</button>
                 </CopyToClipboard>
             </div>
-            <SyntaxHighlighter 
-                language={language} 
-                style={vscDarkPlus} 
-                customStyle={styles.syntaxContent}
-            >
+            <SyntaxHighlighter language={language} style={vscDarkPlus} customStyle={styles.syntax}>
                 {code}
             </SyntaxHighlighter>
         </div>
@@ -267,66 +238,54 @@ function CodeBlock({ code, language }) {
 }
 
 function TypingDots() {
-    return (
-        <div style={styles.typing}>
-            <span style={styles.dot}></span>
-            <span style={styles.dot}></span>
-            <span style={styles.dot}></span>
-        </div>
-    );
+    return <div style={styles.typing}><span style={styles.dot}></span><span style={styles.dot}></span><span style={styles.dot}></span></div>;
 }
 
 const styles = {
-    page: { width: '100vw', height: '100vh', background: '#0a0b10', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', position: 'relative', fontFamily: "'Inter', sans-serif", color: '#fff' },
-    bgGlow1: { position: 'absolute', width: '500px', height: '500px', background: 'radial-gradient(circle, rgba(99, 102, 241, 0.15) 0%, transparent 70%)', top: '-100px', right: '-100px' },
-    bgGlow2: { position: 'absolute', width: '600px', height: '600px', background: 'radial-gradient(circle, rgba(168, 85, 247, 0.1) 0%, transparent 70%)', bottom: '-150px', left: '-150px' },
-    container: { width: '100%', height: '100%', maxWidth: '1400px', background: 'rgba(23, 25, 35, 0.85)', backdropFilter: 'blur(30px)', display: 'flex', flexDirection: 'column', zIndex: 10 },
-    header: { padding: '20px 40px', borderBottom: '1px solid rgba(255, 255, 255, 0.08)', display: 'flex', alignItems: 'center', gap: '20px' },
-    logoBox: { width: '45px', height: '45px', background: 'linear-gradient(135deg, #6366f1 0%, #a855f7 100%)', borderRadius: '14px', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 8px 16px rgba(99, 102, 241, 0.2)' },
-    logoIcon: { fontSize: '24px' },
+    appWrapper: { width: '100vw', height: '100vh', background: '#0a0b10', overflow: 'hidden', position: 'relative', fontFamily: "'Inter', sans-serif", display: 'flex', justifyContent: 'center', alignItems: 'center' },
+    bgGlow1: { position: 'absolute', width: '500px', height: '500px', background: 'radial-gradient(circle, rgba(99, 102, 241, 0.1) 0%, transparent 70%)', top: '-100px', right: '-100px' },
+    bgGlow2: { position: 'absolute', width: '600px', height: '600px', background: 'radial-gradient(circle, rgba(168, 85, 247, 0.05) 0%, transparent 70%)', bottom: '-150px', left: '-150px' },
+    mainContainer: { width: '90%', maxWidth: '1400px', height: '90vh', background: 'rgba(23, 25, 35, 0.8)', backdropFilter: 'blur(20px)', borderRadius: '24px', border: '1px solid rgba(255, 255, 255, 0.1)', display: 'flex', flexDirection: 'column', overflow: 'hidden', zIndex: 10, boxSizing: 'border-box' },
+    header: { padding: '20px 30px', borderBottom: '1px solid rgba(255, 255, 255, 0.08)', display: 'flex', alignItems: 'center', gap: '15px' },
+    logoBox: { width: '40px', height: '40px', background: 'linear-gradient(135deg, #6366f1 0%, #a855f7 100%)', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center' },
+    logoIcon: { fontSize: '22px', color: '#fff' },
     headerText: { flex: 1 },
-    title: { fontSize: '22px', fontWeight: '800', margin: 0, letterSpacing: '-0.02em' },
-    subtitle: { fontSize: '13px', color: '#94a3b8', margin: '2px 0 0 0', fontWeight: '500' },
-    headerActions: { display: 'flex', gap: '15px' },
-    headerIconBtn: { background: 'rgba(255, 255, 255, 0.05)', border: '1px solid rgba(255, 255, 255, 0.1)', color: '#94a3b8', borderRadius: '12px', width: '42px', height: '42px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', transition: 'all 0.2s' },
-    chatBox: { flex: 1, overflowY: 'auto', padding: '40px', display: 'flex', flexDirection: 'column', gap: '30px' },
-    messageRow: { display: 'flex', gap: '16px', maxWidth: '1000px', margin: '0 auto', width: '100%' },
-    botAvatar: { width: '40px', height: '40px', borderRadius: '12px', background: 'rgba(99, 102, 241, 0.1)', color: '#818cf8', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid rgba(99, 102, 241, 0.2)', flexShrink: 0 },
-    userAvatar: { width: '40px', height: '40px', borderRadius: '12px', background: 'rgba(168, 85, 247, 0.1)', color: '#c084fc', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid rgba(168, 85, 247, 0.2)', flexShrink: 0 },
-    messageBubble: { maxWidth: '85%', padding: '18px 24px', borderRadius: '20px', fontSize: '15.5px', lineHeight: '1.6', position: 'relative' },
-    botBubble: { background: 'rgba(30, 41, 59, 0.4)', border: '1px solid rgba(255, 255, 255, 0.05)', color: '#e2e8f0', borderTopLeftRadius: '4px' },
-    userBubble: { background: 'linear-gradient(135deg, #6366f1 0%, #4f46e5 100%)', color: '#fff', borderTopRightRadius: '4px', boxShadow: '0 10px 20px -5px rgba(99, 102, 241, 0.3)' },
-    messageSender: { fontSize: '11px', fontWeight: '700', textTransform: 'uppercase', marginBottom: '8px', opacity: 0.5, letterSpacing: '0.05em' },
+    title: { fontSize: '18px', fontWeight: '700', margin: 0, color: '#fff' },
+    subtitle: { fontSize: '12px', color: '#94a3b8', margin: 0 },
+    headerActions: { display: 'flex', gap: '10px' },
+    headerIconBtn: { background: 'transparent', border: 'none', color: '#94a3b8', cursor: 'pointer', padding: '5px' },
+    messagesArea: { flex: 1, overflowY: 'auto', padding: '20px', display: 'flex', flexDirection: 'column', justifyContent: 'flex-start' },
+    messagesCenter: { maxWidth: '1000px', width: '100%', margin: '0 auto', display: 'flex', flexDirection: 'column', gap: '24px' },
+    messageRow: { display: 'flex', gap: '12px', width: '100%' },
+    botAvatar: { width: '36px', height: '36px', borderRadius: '10px', background: 'rgba(99, 102, 241, 0.1)', color: '#818cf8', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 },
+    userAvatar: { width: '36px', height: '36px', borderRadius: '10px', background: 'rgba(168, 85, 247, 0.1)', color: '#c084fc', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 },
+    messageBubble: { maxWidth: '80%', padding: '16px 20px', borderRadius: '18px', fontSize: '15px', lineHeight: '1.5' },
+    botBubble: { background: 'rgba(30, 41, 59, 0.5)', border: '1px solid rgba(255, 255, 255, 0.05)', color: '#e2e8f0' },
+    userBubble: { background: 'linear-gradient(135deg, #6366f1 0%, #4f46e5 100%)', color: '#fff' },
+    messageSender: { fontSize: '11px', fontWeight: '600', textTransform: 'uppercase', marginBottom: '6px', opacity: 0.6 },
     messageText: { whiteSpace: 'pre-wrap' },
-    inputArea: { padding: '30px 40px', borderTop: '1px solid rgba(255, 255, 255, 0.08)' },
-    inputWrapper: { maxWidth: '1000px', margin: '0 auto', display: 'flex', gap: '15px', position: 'relative' },
-    input: { flex: 1, background: 'rgba(15, 23, 42, 0.7)', border: '1px solid rgba(255, 255, 255, 0.1)', borderRadius: '16px', padding: '16px 24px', color: '#fff', fontSize: '16px', outline: 'none', transition: 'all 0.2s' },
-    button: { background: 'linear-gradient(135deg, #6366f1 0%, #a855f7 100%)', color: '#fff', border: 'none', borderRadius: '16px', width: '56px', height: '56px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', transition: 'all 0.3s', boxShadow: '0 8px 16px rgba(99, 102, 241, 0.2)' },
-    markdownWrapper: { overflowWrap: 'anywhere' },
-    paragraph: { margin: '0 0 12px 0' },
-    ul: { margin: '0 0 12px 24px' },
-    li: { margin: '0 0 6px 0' },
-    inlineCode: { background: 'rgba(255, 255, 255, 0.1)', padding: '2px 6px', borderRadius: '4px', color: '#818cf8', fontWeight: '600' },
-    codeBlockContainer: { margin: '15px 0', borderRadius: '12px', overflow: 'hidden', border: '1px solid rgba(255, 255, 255, 0.1)' },
-    codeHeader: { background: '#1e1e2e', padding: '10px 16px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' },
-    codeLang: { fontSize: '12px', color: '#94a3b8', fontWeight: '700' },
-    copyBtn: { background: 'transparent', border: 'none', color: '#94a3b8', fontSize: '12px', display: 'flex', gap: '6px', cursor: 'pointer' },
-    syntaxContent: { margin: 0, padding: '20px' },
-    historyOverlay: { position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.7)', zIndex: 100, display: 'flex', justifyContent: 'flex-end' },
-    historyPanel: { width: '380px', height: '100%', background: '#0f111a', borderLeft: '1px solid rgba(255,255,255,0.1)', display: 'flex', flexDirection: 'column' },
-    historyHeader: { padding: '30px', borderBottom: '1px solid rgba(255,255,255,0.1)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' },
-    historyHeaderLeft: { display: 'flex', alignItems: 'center', gap: '12px', color: '#fff' },
-    historyTitle: { fontSize: '20px', margin: 0, fontWeight: '700' },
-    historyList: { flex: 1, overflowY: 'auto', padding: '20px' },
-    historyItem: { padding: '20px', background: 'rgba(255,255,255,0.03)', borderRadius: '14px', marginBottom: '15px', border: '1px solid rgba(255,255,255,0.05)', transition: '0.2s' },
-    historyContent: { cursor: 'pointer' },
-    historyItemTitle: { fontSize: '15px', fontWeight: '600', color: '#e2e8f0', marginBottom: '5px' },
-    historyItemMeta: { fontSize: '11px', color: '#718096' },
-    historyItemActions: { display: 'flex', justifyContent: 'flex-end', marginTop: '10px', paddingTop: '10px', borderTop: '1px solid rgba(255,255,255,0.05)' },
-    historyDeleteBtn: { color: '#ef4444', background: 'transparent', border: 'none', cursor: 'pointer' },
-    iconBtn: { background: 'transparent', border: 'none', color: '#94a3b8', cursor: 'pointer' },
-    typing: { display: 'flex', gap: '5px', padding: '8px 0' },
+    inputArea: { padding: '20px 30px', borderTop: '1px solid rgba(255, 255, 255, 0.08)' },
+    inputWrapper: { maxWidth: '1000px', margin: '0 auto', display: 'flex', gap: '12px' },
+    input: { flex: 1, background: 'rgba(15, 23, 42, 0.6)', border: '1px solid rgba(255, 255, 255, 0.1)', borderRadius: '14px', padding: '14px 20px', color: '#fff', outline: 'none' },
+    sendButton: { background: 'linear-gradient(135deg, #6366f1 0%, #a855f7 100%)', color: '#fff', border: 'none', borderRadius: '14px', width: '50px', height: '50px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' },
+    typing: { display: 'flex', gap: '4px', padding: '5px 0' },
     dot: { width: '6px', height: '6px', background: '#818cf8', borderRadius: '50%', animation: 'blink 1.4s infinite' },
+    mb8: { margin: '0 0 8px 0' },
+    codeBlock: { margin: '15px 0', borderRadius: '12px', overflow: 'hidden', border: '1px solid rgba(255, 255, 255, 0.1)' },
+    codeHeader: { background: '#1e1e2e', padding: '8px 16px', display: 'flex', justifyContent: 'space-between', color: '#94a3b8', fontSize: '12px' },
+    copyBtn: { background: 'transparent', border: 'none', color: '#94a3b8', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '5px' },
+    syntax: { margin: 0, padding: '20px', fontSize: '14px' },
+    historyOverlay: { position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.5)', zIndex: 100, display: 'flex', justifyContent: 'flex-end' },
+    historyPanel: { width: '320px', height: '100%', background: '#171923', display: 'flex', flexDirection: 'column' },
+    historyHeader: { padding: '20px', borderBottom: '1px solid rgba(255,255,255,0.1)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' },
+    historyTitle: { margin: 0, color: '#fff', fontSize: '18px' },
+    historyList: { flex: 1, overflowY: 'auto', padding: '15px' },
+    historyItem: { padding: '15px', background: 'rgba(255,255,255,0.03)', borderRadius: '12px', marginBottom: '10px', display: 'flex', justifyContent: 'space-between' },
+    historyContent: { flex: 1, cursor: 'pointer' },
+    historyItemTitle: { fontSize: '14px', color: '#fff', fontWeight: '500' },
+    historyItemMeta: { fontSize: '11px', color: '#718096' },
+    deleteBtn: { background: 'transparent', border: 'none', color: '#ff4d4d', cursor: 'pointer' },
+    iconBtn: { background: 'transparent', border: 'none', color: '#fff', cursor: 'pointer' }
 };
 
 export default App;
