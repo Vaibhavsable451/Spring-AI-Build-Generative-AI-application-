@@ -82,8 +82,7 @@ function App() {
         setHistory((prev) => prev.filter((item) => item.id !== id));
     };
 
-    const askQuestion = async (question, showUserMessage = true) => {
-        if (!question.trim()) return;
+        if (!question.trim() || loading) return;
 
         if (showUserMessage) {
             const userMessage = {
@@ -97,7 +96,8 @@ function App() {
 
         try {
             const baseUrl = (process.env.REACT_APP_API_URL || "https://spring-ai-build-generative-ai-application-ktur.onrender.com").replace(/\/+$/, "");
-            console.log("Requesting from:", `${baseUrl}/user/chat`);
+            console.log(">>> Requesting:", `${baseUrl}/user/chat?question=${question}`);
+            
             const response = await axios.get(`${baseUrl}/user/chat`, {
                 params: {
                     question
@@ -105,6 +105,7 @@ function App() {
                 headers: {
                     Accept: "*/*",
                 },
+                timeout: 30000, // 30 second timeout
             });
 
             const samReply = {
