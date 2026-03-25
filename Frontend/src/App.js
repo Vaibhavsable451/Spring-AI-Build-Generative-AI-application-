@@ -103,7 +103,7 @@ function App() {
                     question
                 },
                 headers: {
-                    Accept: "application/json",
+                    Accept: "*/*",
                 },
             });
 

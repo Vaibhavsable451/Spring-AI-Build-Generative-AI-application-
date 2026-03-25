@@ -18,7 +18,7 @@ public class ChatController {
         this.chatService = chatService;
     }
 
-    @GetMapping(value = "/user/chat", produces = "text/plain")
+    @GetMapping(value = "/user/chat")
     public ResponseEntity<String> chat(@RequestParam String question) {
         try {
             String result = chatService.getMyResponse(question);
