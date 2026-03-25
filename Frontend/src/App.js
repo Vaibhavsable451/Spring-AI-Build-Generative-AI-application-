@@ -108,6 +108,9 @@ function App() {
                 timeout: 30000, // 30 second timeout
             });
 
+            console.log(">>> Response Status:", response.status);
+            console.log(">>> Response Data:", response.data);
+
             const samReply = {
                 from: "Kairo",
                 text: typeof response.data === "string" ?
