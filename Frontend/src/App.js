@@ -72,19 +72,19 @@ function App() {
             const baseUrl = (process.env.REACT_APP_API_URL || "https://spring-ai-build-generative-ai-application-ktur.onrender.com").replace(/\/+$/, "");
             const response = await axios.get(`${baseUrl}/user/chat`, {
                 params: { question },
-                timeout: 30000,
+                timeout: 60000,
             });
 
             const samReply = {
-                from: "Kairo AI",
+                from: "Kairo AI Assistant",
                 text: typeof response.data === 'string' ? response.data : JSON.stringify(response.data)
             };
 
             setMessages(prev => [...prev, samReply]);
         } catch (error) {
             setMessages(prev => [...prev, { 
-                from: "Kairo AI", 
-                text: `⚠️ Connection Issue: ${error.message}` 
+                from: "Kairo AI Assistant", 
+                text: `⚠️ **Update:** The AI is still warming up. (Error: ${error.message})` 
             }]);
         } finally {
             setLoading(false);
@@ -106,9 +106,6 @@ function App() {
 
     return (
         <div style={styles.appWrapper}>
-            <div style={styles.bgGlow1}></div>
-            <div style={styles.bgGlow2}></div>
-
             {showHistory && (
                 <div style={styles.historyOverlay}>
                     <div style={styles.historyPanel}>
@@ -117,7 +114,7 @@ function App() {
                             <button onClick={() => setShowHistory(false)} style={styles.iconBtn}><FiX size={20} /></button>
                         </div>
                         <div style={styles.historyList}>
-                            {history.length === 0 ? <div style={styles.emptyHistory}>No history yet</div> : 
+                            {history.length === 0 ? <div style={styles.emptyHistory}>No history</div> : 
                                 history.map(item => (
                                     <div key={item.id} style={styles.historyItem}>
                                         <div style={styles.historyContent} onClick={() => loadHistory(item)}>
@@ -133,59 +130,59 @@ function App() {
                 </div>
             )}
 
-            <div style={styles.mainContainer}>
-                <div style={styles.header}>
+            <div style={styles.header}>
+                <div style={styles.headerLeft}>
                     <div style={styles.logoBox}><RiRobot3Fill style={styles.logoIcon} /></div>
-                    <div style={styles.headerText}>
+                    <div>
                         <h1 style={styles.title}>Kairo AI Assistant</h1>
-                        <p style={styles.subtitle}>Spring AI + Llama 3.1</p>
-                    </div>
-                    <div style={styles.headerActions}>
-                        <button onClick={() => setShowHistory(true)} style={styles.headerIconBtn}><FiClock size={18} /></button>
-                        <button onClick={clearChat} style={styles.headerIconBtn}><FiTrash2 size={18} /></button>
+                        <p style={styles.subtitle}>Powered by Groq + Spring AI</p>
                     </div>
                 </div>
+                <div style={styles.headerActions}>
+                    <button onClick={() => setShowHistory(true)} style={styles.headerIconBtn}><FiClock size={20} /></button>
+                    <button onClick={clearChat} style={styles.headerIconBtn}><FiRefreshCw size={20} /></button>
+                </div>
+            </div>
 
-                <div style={styles.messagesArea}>
-                    <div style={styles.messagesCenter}>
-                        {messages.map((msg, idx) => {
-                            const isUser = msg.from === userName;
-                            return (
-                                <div key={idx} style={{...styles.messageRow, justifyContent: isUser ? 'flex-end' : 'flex-start'}}>
-                                    {!isUser && <div style={styles.botAvatar}><TbRobot /></div>}
-                                    <div style={{...styles.messageBubble, ...(isUser ? styles.userBubble : styles.botBubble)}}>
-                                        <div style={styles.messageSender}>{msg.from}</div>
-                                        {isUser ? <div style={styles.messageText}>{msg.text}</div> : <MarkdownMessage content={msg.text} />}
-                                    </div>
-                                    {isUser && <div style={styles.userAvatar}><FaUser /></div>}
+            <div style={styles.scrollArea}>
+                <div style={styles.messagesContainer}>
+                    {messages.map((msg, idx) => {
+                        const isUser = msg.from === userName;
+                        return (
+                            <div key={idx} style={{...styles.messageRow, justifyContent: isUser ? 'flex-end' : 'flex-start'}}>
+                                {!isUser && <div style={styles.botAvatar}><TbRobot /></div>}
+                                <div style={{...styles.messageBubble, ...(isUser ? styles.userBubble : styles.botBubble)}}>
+                                    <div style={styles.messageSender}>{msg.from}</div>
+                                    {isUser ? <div style={styles.messageText}>{msg.text}</div> : <MarkdownMessage content={msg.text} />}
                                 </div>
-                            );
-                        })}
-                        {loading && (
-                            <div style={{...styles.messageRow, justifyContent: 'flex-start'}}>
-                                <div style={styles.botAvatar}><TbRobot /></div>
-                                <div style={{...styles.messageBubble, ...styles.botBubble}}>
-                                    <div style={styles.messageSender}>Kairo AI</div>
-                                    <TypingDots />
-                                </div>
+                                {isUser && <div style={styles.userAvatar}><FaUser /></div>}
                             </div>
-                        )}
-                        <div ref={chatEndRef} />
-                    </div>
+                        );
+                    })}
+                    {loading && (
+                        <div style={{...styles.messageRow, justifyContent: 'flex-start'}}>
+                            <div style={styles.botAvatar}><TbRobot /></div>
+                            <div style={{...styles.messageBubble, ...styles.botBubble}}>
+                                <div style={styles.messageSender}>Kairo AI</div>
+                                <TypingDots />
+                            </div>
+                        </div>
+                    )}
+                    <div ref={chatEndRef} />
                 </div>
+            </div>
 
-                <div style={styles.inputArea}>
-                    <div style={styles.inputWrapper}>
-                        <input 
-                            style={styles.input}
-                            type="text" 
-                            placeholder="Type your message..." 
-                            value={input} 
-                            onChange={(e) => setInput(e.target.value)} 
-                            onKeyDown={(e) => e.key === 'Enter' && sendMessage()} 
-                        />
-                        <button style={styles.sendButton} onClick={sendMessage}><FiSend size={20} /></button>
-                    </div>
+            <div style={styles.inputSection}>
+                <div style={styles.inputBox}>
+                    <input 
+                        style={styles.input}
+                        type="text" 
+                        placeholder="Type a message..." 
+                        value={input} 
+                        onChange={(e) => setInput(e.target.value)} 
+                        onKeyDown={(e) => e.key === 'Enter' && sendMessage()} 
+                    />
+                    <button style={styles.sendBtn} onClick={sendMessage}><FiSend size={20} /></button>
                 </div>
             </div>
         </div>
@@ -194,45 +191,30 @@ function App() {
 
 function MarkdownMessage({ content }) {
     return (
-        <div style={styles.markdownWrapper}>
-            <ReactMarkdown 
-                remarkPlugins={[remarkGfm]}
-                components={{
-                    code({ inline, className, children, ...props }) {
-                        const match = /language-(\w+)/.exec(className || '');
-                        const language = match ? match[1] : 'text';
-                        const codeText = String(children).replace(/\n$/, '');
-                        if (!inline) {
-                            return <CodeBlock code={codeText} language={language} />;
-                        }
-                        return <code style={styles.inlineCode} {...props}>{children}</code>;
-                    },
-                    p: ({ children }) => <p style={styles.mb8}>{children}</p>,
-                }}
-            >
-                {content}
-            </ReactMarkdown>
-        </div>
+        <ReactMarkdown remarkPlugins={[remarkGfm]} components={{
+            code({ inline, className, children, ...props }) {
+                const match = /language-(\w+)/.exec(className || '');
+                const language = match ? match[1] : 'text';
+                const codeText = String(children).replace(/\n$/, '');
+                if (!inline) return <CodeBlock code={codeText} language={language} />;
+                return <code style={styles.inlineCode} {...props}>{children}</code>;
+            },
+            p: ({ children }) => <p style={{margin: '0 0 10px 0'}}>{children}</p>,
+        }}>{content}</ReactMarkdown>
     );
 }
 
 function CodeBlock({ code, language }) {
     const [copied, setCopied] = useState(false);
-    const handleCopy = () => {
-        setCopied(true);
-        setTimeout(() => setCopied(false), 2000);
-    };
     return (
         <div style={styles.codeBlock}>
             <div style={styles.codeHeader}>
                 <span>{language}</span>
-                <CopyToClipboard text={code} onCopy={handleCopy}>
+                <CopyToClipboard text={code} onCopy={() => {setCopied(true); setTimeout(()=>setCopied(false), 2000)}}>
                     <button style={styles.copyBtn}>{copied ? <FiCheck /> : <FiCopy />} {copied ? 'Copied' : 'Copy'}</button>
                 </CopyToClipboard>
             </div>
-            <SyntaxHighlighter language={language} style={vscDarkPlus} customStyle={styles.syntax}>
-                {code}
-            </SyntaxHighlighter>
+            <SyntaxHighlighter language={language} style={vscDarkPlus} customStyle={styles.syntax}>{code}</SyntaxHighlighter>
         </div>
     );
 }
@@ -242,49 +224,46 @@ function TypingDots() {
 }
 
 const styles = {
-    appWrapper: { width: '100vw', height: '100vh', background: '#0a0b10', overflow: 'hidden', position: 'relative', fontFamily: "'Inter', sans-serif", display: 'flex', justifyContent: 'center', alignItems: 'center' },
-    bgGlow1: { position: 'absolute', width: '500px', height: '500px', background: 'radial-gradient(circle, rgba(99, 102, 241, 0.1) 0%, transparent 70%)', top: '-100px', right: '-100px' },
-    bgGlow2: { position: 'absolute', width: '600px', height: '600px', background: 'radial-gradient(circle, rgba(168, 85, 247, 0.05) 0%, transparent 70%)', bottom: '-150px', left: '-150px' },
-    mainContainer: { width: '90%', maxWidth: '1400px', height: '90vh', background: 'rgba(23, 25, 35, 0.8)', backdropFilter: 'blur(20px)', borderRadius: '24px', border: '1px solid rgba(255, 255, 255, 0.1)', display: 'flex', flexDirection: 'column', overflow: 'hidden', zIndex: 10, boxSizing: 'border-box' },
-    header: { padding: '20px 30px', borderBottom: '1px solid rgba(255, 255, 255, 0.08)', display: 'flex', alignItems: 'center', gap: '15px' },
-    logoBox: { width: '40px', height: '40px', background: 'linear-gradient(135deg, #6366f1 0%, #a855f7 100%)', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center' },
-    logoIcon: { fontSize: '22px', color: '#fff' },
-    headerText: { flex: 1 },
-    title: { fontSize: '18px', fontWeight: '700', margin: 0, color: '#fff' },
+    appWrapper: { width: '100vw', height: '100vh', background: '#0a0b10', display: 'flex', flexDirection: 'column', position: 'relative', overflow: 'hidden', fontFamily: "'Inter', sans-serif", color: '#fff' },
+    header: { padding: '15px 30px', background: 'rgba(23, 25, 35, 0.95)', borderBottom: '1px solid rgba(255, 255, 255, 0.1)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', zIndex: 100, backdropFilter: 'blur(10px)' },
+    headerLeft: { display: 'flex', alignItems: 'center', gap: '15px' },
+    logoBox: { width: '42px', height: '42px', background: 'linear-gradient(135deg, #6366f1 0%, #a855f7 100%)', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center' },
+    logoIcon: { fontSize: '24px' },
+    title: { fontSize: '18px', fontWeight: '700', margin: 0 },
     subtitle: { fontSize: '12px', color: '#94a3b8', margin: 0 },
-    headerActions: { display: 'flex', gap: '10px' },
-    headerIconBtn: { background: 'transparent', border: 'none', color: '#94a3b8', cursor: 'pointer', padding: '5px' },
-    messagesArea: { flex: 1, overflowY: 'auto', padding: '20px', display: 'flex', flexDirection: 'column', justifyContent: 'flex-start' },
-    messagesCenter: { maxWidth: '1000px', width: '100%', margin: '0 auto', display: 'flex', flexDirection: 'column', gap: '24px' },
-    messageRow: { display: 'flex', gap: '12px', width: '100%' },
-    botAvatar: { width: '36px', height: '36px', borderRadius: '10px', background: 'rgba(99, 102, 241, 0.1)', color: '#818cf8', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 },
-    userAvatar: { width: '36px', height: '36px', borderRadius: '10px', background: 'rgba(168, 85, 247, 0.1)', color: '#c084fc', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 },
-    messageBubble: { maxWidth: '80%', padding: '16px 20px', borderRadius: '18px', fontSize: '15px', lineHeight: '1.5' },
-    botBubble: { background: 'rgba(30, 41, 59, 0.5)', border: '1px solid rgba(255, 255, 255, 0.05)', color: '#e2e8f0' },
-    userBubble: { background: 'linear-gradient(135deg, #6366f1 0%, #4f46e5 100%)', color: '#fff' },
-    messageSender: { fontSize: '11px', fontWeight: '600', textTransform: 'uppercase', marginBottom: '6px', opacity: 0.6 },
+    headerActions: { display: 'flex', gap: '15px' },
+    headerIconBtn: { background: 'transparent', border: 'none', color: '#94a3b8', cursor: 'pointer' },
+    scrollArea: { flex: 1, overflowY: 'auto', padding: '30px 20px', display: 'flex', flexDirection: 'column-reverse' },
+    messagesContainer: { maxWidth: '1000px', width: '100%', margin: '0 auto', display: 'flex', flexDirection: 'column', gap: '25px', justifyContent: 'flex-end' },
+    messageRow: { display: 'flex', gap: '15px', width: '100%', animation: 'fadeIn 0.3s ease-in' },
+    botAvatar: { width: '38px', height: '38px', borderRadius: '10px', background: 'rgba(99, 102, 241, 0.1)', border: '1px solid rgba(99, 102, 241, 0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#818cf8', flexShrink: 0 },
+    userAvatar: { width: '38px', height: '38px', borderRadius: '10px', background: 'rgba(168, 85, 247, 0.1)', border: '1px solid rgba(168, 85, 247, 0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#c084fc', flexShrink: 0 },
+    messageBubble: { maxWidth: '80%', padding: '16px 20px', borderRadius: '18px', fontSize: '15px', lineHeight: '1.6' },
+    botBubble: { background: 'rgba(30, 41, 59, 0.6)', color: '#fff' },
+    userBubble: { background: 'linear-gradient(135deg, #4f46e5 0%, #6366f1 100%)', color: '#fff' },
+    messageSender: { fontSize: '11px', fontWeight: 'bold', textTransform: 'uppercase', marginBottom: '5px', opacity: 0.6 },
     messageText: { whiteSpace: 'pre-wrap' },
-    inputArea: { padding: '20px 30px', borderTop: '1px solid rgba(255, 255, 255, 0.08)' },
-    inputWrapper: { maxWidth: '1000px', margin: '0 auto', display: 'flex', gap: '12px' },
-    input: { flex: 1, background: 'rgba(15, 23, 42, 0.6)', border: '1px solid rgba(255, 255, 255, 0.1)', borderRadius: '14px', padding: '14px 20px', color: '#fff', outline: 'none' },
-    sendButton: { background: 'linear-gradient(135deg, #6366f1 0%, #a855f7 100%)', color: '#fff', border: 'none', borderRadius: '14px', width: '50px', height: '50px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' },
-    typing: { display: 'flex', gap: '4px', padding: '5px 0' },
-    dot: { width: '6px', height: '6px', background: '#818cf8', borderRadius: '50%', animation: 'blink 1.4s infinite' },
-    mb8: { margin: '0 0 8px 0' },
+    inputSection: { padding: '20px 30px', background: 'rgba(23, 25, 35, 0.95)', borderTop: '1px solid rgba(255, 255, 255, 0.1)' },
+    inputBox: { maxWidth: '1000px', margin: '0 auto', display: 'flex', gap: '15px' },
+    input: { flex: 1, background: 'rgba(15, 23, 42, 0.8)', border: '1px solid rgba(255, 255, 255, 0.1)', borderRadius: '14px', padding: '14px 20px', color: '#fff', outline: 'none' },
+    sendBtn: { background: '#6366f1', color: '#fff', border: 'none', borderRadius: '14px', width: '50px', height: '50px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' },
+    inlineCode: { background: 'rgba(255, 255, 255, 0.1)', padding: '2px 5px', borderRadius: '4px', color: '#818cf8' },
     codeBlock: { margin: '15px 0', borderRadius: '12px', overflow: 'hidden', border: '1px solid rgba(255, 255, 255, 0.1)' },
-    codeHeader: { background: '#1e1e2e', padding: '8px 16px', display: 'flex', justifyContent: 'space-between', color: '#94a3b8', fontSize: '12px' },
+    codeHeader: { background: '#1e1e2e', padding: '8px 15px', display: 'flex', justifyContent: 'space-between', color: '#94a3b8', fontSize: '12px' },
     copyBtn: { background: 'transparent', border: 'none', color: '#94a3b8', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '5px' },
     syntax: { margin: 0, padding: '20px', fontSize: '14px' },
-    historyOverlay: { position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.5)', zIndex: 100, display: 'flex', justifyContent: 'flex-end' },
+    typing: { display: 'flex', gap: '5px', padding: '8px 0' },
+    dot: { width: '6px', height: '6px', background: '#818cf8', borderRadius: '50%', animation: 'blink 1.4s infinite' },
+    historyOverlay: { position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.6)', zIndex: 200, display: 'flex', justifyContent: 'flex-end' },
     historyPanel: { width: '320px', height: '100%', background: '#171923', display: 'flex', flexDirection: 'column' },
-    historyHeader: { padding: '20px', borderBottom: '1px solid rgba(255,255,255,0.1)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' },
-    historyTitle: { margin: 0, color: '#fff', fontSize: '18px' },
-    historyList: { flex: 1, overflowY: 'auto', padding: '15px' },
-    historyItem: { padding: '15px', background: 'rgba(255,255,255,0.03)', borderRadius: '12px', marginBottom: '10px', display: 'flex', justifyContent: 'space-between' },
+    historyHeader: { padding: '20px', borderBottom: '1px solid rgba(255,255,255,0.1)', display: 'flex', justifyContent: 'space-between' },
+    historyTitle: { margin: 0 },
+    historyList: { flex: 1, overflowY: 'auto', padding: '20px' },
+    historyItem: { padding: '15px', background: 'rgba(255,255,255,0.05)', borderRadius: '12px', marginBottom: '15px', display: 'flex', justifyContent: 'space-between' },
     historyContent: { flex: 1, cursor: 'pointer' },
-    historyItemTitle: { fontSize: '14px', color: '#fff', fontWeight: '500' },
+    historyItemTitle: { fontSize: '14px', fontWeight: 'bold' },
     historyItemMeta: { fontSize: '11px', color: '#718096' },
-    deleteBtn: { background: 'transparent', border: 'none', color: '#ff4d4d', cursor: 'pointer' },
+    deleteBtn: { background: 'transparent', border: 'none', color: '#ef4444', cursor: 'pointer' },
     iconBtn: { background: 'transparent', border: 'none', color: '#fff', cursor: 'pointer' }
 };
 
